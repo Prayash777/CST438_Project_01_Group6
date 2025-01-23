@@ -3,6 +3,7 @@ Project 1 - Android based API app
 
 Members:
 - Ethan Bleier
+- Prayash Raj Singh
 - Ezequiel Reyes
 - 
 - 
