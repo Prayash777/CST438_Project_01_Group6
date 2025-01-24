@@ -4,5 +4,5 @@ Project 1 - Android based API app
 Members:
 - Ethan Bleier
 - Ezequiel Reyes
-- 
+- Noah Mckegney 
 - 
