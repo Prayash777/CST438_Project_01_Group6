@@ -1,10 +1,28 @@
 import { Image } from 'expo-image'
 import { View, Text, StyleSheet, ImageBackground } from 'react-native'
 import bannerImg from "@/assets/images/gridBackground.jpg"
+import { useEffect } from 'react'
+import { useRouter, useRootNavigationState } from 'expo-router'
 
 const app = () => {
+  const router = useRouter()
+  const rootNavigationState = useRootNavigationState()
+
+  // logging
+  console.log("rootNavigationState", rootNavigationState)
+
+  useEffect(() => {
+    if (!rootNavigationState?.key) return
+    
+    // redirect to login page on load
+    // we have major FOUC problem here
+    // TODO: Implement async
+    // TODO: Implement isLoading state
+    router.replace('/auth/Login')
+  }, [rootNavigationState?.key])
+
   return (
-    < View style={styles.mainContainer}>
+    <View style={styles.mainContainer}>
       <Text style={styles.title}>Habit tracker</Text>
       <View style={styles.mainContent}>
 
@@ -19,7 +37,7 @@ const app = () => {
           source={bannerImg}
         /> */}
       </View>
-    </View >
+    </View>
   )
 }
 export default app
