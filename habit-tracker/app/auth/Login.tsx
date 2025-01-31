@@ -6,7 +6,7 @@ I despise websites that force users to login before they can view the home page.
 
 import { useState, FormEvent } from 'react';
 import cssStyles from './Login.module.css';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, TextInput, Button } from 'react-native';
 import { useRouter, useNavigation } from 'expo-router';
 
 interface LoginFormData {
@@ -52,38 +52,30 @@ const Login = () => {
   return (
     <View style={styles.loginContainer}>
       <Text style={styles.title}>Login to Track Today!</Text>
-      <form onSubmit={handleSubmit} className={cssStyles.form}>
-        <div className={cssStyles.formGroup}>
-          <input
-            type="email"
+      <View style={styles.form}>
+        <View>
+          <TextInput
             value={formData.email}
-            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+            onChangeText={(e) => setFormData({ ...formData, email: e })}
             placeholder="Email"
-            className={cssStyles.input}
-            required
+            style={styles.input}
           />
-        </div>
-        <div className={cssStyles.formGroup}>
-          <input
-            type="password"
+        </View>
+        <View>
+          <TextInput
             value={formData.password}
-            onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+            onChangeText={(e) => setFormData({ ...formData, password: e })}
             placeholder="Password"
-            className={cssStyles.input}
-            required
+            style={styles.input}
           />
-        </div>
-        <div className={cssStyles.formGroup}>
-          <button type="submit" className={`${cssStyles.button} ${cssStyles.buttonSpacing}`}>Log In</button>
-          <button 
-            type="button" 
-            className={cssStyles.secondaryButton}
-            onClick={() => router.push('/auth/Signup')}
-          >
-            Sign Up
-          </button>
-        </div>
-      </form>
+        </View>
+        <View>
+          <Button 
+            title="Sign Up"
+            onPress={() => router.push('/auth/Signup')}
+          />
+        </View>
+      </View>
     </View>
   );
 };
