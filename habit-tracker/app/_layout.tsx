@@ -5,8 +5,8 @@ import { StatusBar } from 'expo-status-bar';
 import { useEffect } from 'react';
 import { AuthProvider } from '../hooks/useAuth'
 import { ThemeProvider } from '../hooks/useTheme'
-
 import { useColorScheme } from '@/hooks/useColorScheme';
+
 
 SplashScreen.preventAutoHideAsync();
 
