@@ -7,9 +7,7 @@ import { StatusBar } from 'expo-status-bar';
 import { useEffect } from 'react';
 import { AuthProvider } from '../hooks/useAuth'
 import { useColorScheme } from '@/hooks/useColorScheme';
-import { Button } from 'react-native';
-import { openDatabase, SQLite } from 'expo-sqlite';
-
+import { openDatabaseSync, SQLiteDatabase } from 'expo-sqlite';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -17,13 +15,11 @@ SplashScreen.preventAutoHideAsync();
 const createDbIfNeeded = async (db: SQLiteDatabase) => {
   console.log("Creating database");
   try {
-    let response;
-
     // for developement purposes to get a clean table
     // comment out to save tables per expo app start
-    // let response = await db.execAsync(
-    //   "DROP TABLE IF EXISTS users"
-    // );
+    let response = await db.execAsync(
+      "DROP TABLE IF EXISTS users"
+    );
 
     // Create a table
     response = await db.execAsync(
@@ -53,7 +49,8 @@ export default function RootLayout() {
     return null;
   }
 
-  const db = SQLite.openDatabase('test.db');
+  const db = openDatabaseSync('test.db');
+  createDbIfNeeded(db);
 
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
@@ -61,23 +58,9 @@ export default function RootLayout() {
         <Stack>
           <Stack.Screen name="index" options={{ headerShown: false }} />
           <Stack.Screen name="+not-found" />
-          <Stack.Screen name="settings/settings" options={{ headerShown: false }} />
-          <Stack.Screen name="habit/add-habit" options={{ headerShown: false }} />
         </Stack>
         <StatusBar style={colorScheme === 'dark' ? 'light' : 'dark'} />
       </AuthProvider>
-
-      <Stack>
-        <Stack.Screen name='index'
-          options={{
-            headerTitle: "Testing",
-            headerRight: () => <Button onPress={() => console.log("Pressed")} title="Log In" />,
-          }}
-          />
-        <Stack.Screen name="auth/Login" />
-        <Stack.Screen name="+not-found" />
-      </Stack>
-      <StatusBar style="auto" />
     </ThemeProvider>
   );
 }

@@ -61,11 +61,19 @@ export default function Signup() {
     } catch (error) {
       alert('Registration failed: ' + (error as Error).message);
     }
-  };
+  }
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Sign Up</Text>
+      <View style={styles.header}>
+        <Text
+          style={styles.backButton}
+          onPress={() => router.push('/auth/Login')}
+        >
+          ← Back
+        </Text>
+      </View>
+      <Text style={styles.title}>Sign up to Start Tracking Today!</Text>
       <TextInput
         placeholder="Username"
         value={formData.username}
@@ -99,55 +107,6 @@ export default function Signup() {
         onPress={handleSubmit}
         disabled={!isFormValid()} 
       />
-
-    <View style={styles.signupContainer}>
-      <View style={styles.header}>
-        <Text
-          style={styles.backButton}
-          onPress={() => router.push('/auth/Login')}
-        >
-          ← Back
-        </Text>
-      </View>
-      <Text style={styles.title}>Sign up to Start Tracking Today!</Text>
-      <form onSubmit={handleSubmit} className={cssStyles.form}>
-        <div className={cssStyles.formGroup}>
-          <input
-            type="email"
-            value={formData.email}
-            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-            placeholder="Email"
-            className={cssStyles.input}
-            required
-          />
-        </div>
-        <div className={cssStyles.formGroup}>
-          <input
-            type="password"
-            value={formData.password}
-            onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-            placeholder="Password"
-            className={cssStyles.input}
-            required
-          />
-        </div>
-        <div className={cssStyles.formGroup}>
-          <input
-            type="password"
-            value={formData.confirmPassword}
-            onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
-            placeholder="Confirm Password"
-            className={cssStyles.input}
-            required
-            onPaste={(e) => {
-              e.preventDefault();
-            }}
-          />
-        </div>
-        <div className={cssStyles.formGroup}>
-          <button type="submit" className={`${cssStyles.button} ${cssStyles.buttonSpacing}`}>Sign Up</button>
-        </div>
-      </form>
     </View>
   );
 }

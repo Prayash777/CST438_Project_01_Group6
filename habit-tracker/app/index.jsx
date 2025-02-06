@@ -1,4 +1,3 @@
-
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Alert } from 'react-native'
 import { useEffect, useState } from 'react'
 import { useRouter, useNavigation } from 'expo-router'
@@ -8,26 +7,19 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import { PixelGrid } from '../components/PixelGrid'
 import { Card } from '../components/ui/Card'
 import { PaperProvider } from 'react-native-paper'
-
-import { Image } from 'expo-image'
-import { View, Text, StyleSheet, ImageBackground } from 'react-native'
-import bannerImg from "@/assets/images/gridBackground.jpg"
-import { useEffect } from 'react'
-
-
-import { useRouter, useRootNavigationState } from 'expo-router'
-
+import { useRootNavigationState } from 'expo-router'
 
 const App = () => {
   const router = useRouter()
   const navigation = useNavigation()
+  const rootNavigationState = useRootNavigationState()
   const [habits, setHabits] = useState([])
   const [menuVisible, setMenuVisible] = useState(null)
   const [currentTitle, setCurrentTitle] = useState('One Day at a Time')
 
   const titles = [
     'One Day at a Time',
-    'Small Steps, Big Changes',
+    'Small Steps, Big Changes', 
     'Building Better Habits',
     'Keep Going!',
     'You Got This!',
@@ -39,7 +31,6 @@ const App = () => {
   ]
 
   useEffect(() => {
-
     // This sets the title to one of the titles in the titles array
     // feel free to add more :)
     setCurrentTitle(titles[Math.floor(Math.random() * titles.length)])
@@ -48,16 +39,16 @@ const App = () => {
       tabBarStyle: { display: 'none' }
     })
 
-    if (!rootNavigationState?.key) return
+  //   if (!rootNavigationState?.key) return
 
-    // redirect to login page on load
-    // we have major FOUC problem here
-    // TODO: Implement async
-    // TODO: Implement isLoading state
-    router.replace('/auth/Login')
-  }, [rootNavigationState?.key])
+  //   // redirect to login page on load
+  //   // we have major FOUC problem here
+  //   // TODO: Implement async
+  //   // TODO: Implement isLoading state
+  //   router.replace('/auth/Login')
+  // }, [rootNavigationState?.key])
 
-
+  useEffect(() => {
     const loadHabits = async () => {
       try {
         const stored = await AsyncStorage.getItem('@habits')
@@ -180,6 +171,9 @@ const App = () => {
       </View>
     </PaperProvider>
   )
+}
+
+export default App
 
 // roughly follows this color scheme
 // https://coolors.co/393e41-d3d0cb-e2c044-587b7f-1e2019
@@ -290,6 +284,4 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginTop: 8,
   },
-});
-
-export default App;
+})
