@@ -8,10 +8,6 @@ import { StatusBar } from 'expo-status-bar';
 import { useEffect } from 'react';
 import { AuthProvider } from '../hooks/useAuth'
 import { ThemeProvider } from '../hooks/useTheme'
-
-// database import
-import { SQLiteDatabase, SQLiteProvider } from "expo-sqlite";
-
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { Button } from 'react-native';
 
@@ -87,18 +83,4 @@ export default function RootLayout() {
 
     </ThemeProvider>
   );
-
-  // return (
-  //   <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-  //     <SQLiteProvider databaseName="test.db" onInit={createDbIfNeeded}>
-  //       <Stack>
-  //         {/* Why is this not working */}
-  //         {/* <Stack.Screen name="(tabs)" options={{ headerShown: false }} /> */}
-  //         <Stack.Screen name="./auth/Login" />
-  //         <Stack.Screen name="+not-found" />
-  //       </Stack>
-  //     </SQLiteProvider>
-  //     <StatusBar style="auto" />
-  //   </ThemeProvider>
-  // );
 }
