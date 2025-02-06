@@ -1,3 +1,6 @@
+
+import { DarkTheme, DefaultTheme, ThemeProvider, NavigationContainer } from '@react-navigation/native';
+
 import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
@@ -6,8 +9,31 @@ import { useEffect } from 'react';
 import { AuthProvider } from '../hooks/useAuth'
 import { ThemeProvider } from '../hooks/useTheme'
 import { useColorScheme } from '@/hooks/useColorScheme';
+import { Button } from 'react-native';
 
 SplashScreen.preventAutoHideAsync();
+
+// creating the sqlite database
+const createDbIfNeeded = async (db: SQLiteDatabase) => {
+  console.log("Creating database");
+  try {
+    let response;
+
+    // for developement purposes to get a clean table
+    // comment out to save tables per expo app start
+    // let response = await db.execAsync(
+    //   "DROP TABLE IF EXISTS users"
+    // );
+
+    // Create a table
+    response = await db.execAsync(
+      "CREATE TABLE users (id INTEGER PRIMARY KEY AUTOINCREMENT, email TEXT, password TEXT)"
+    );
+    console.log("Database created", response);
+  } catch (error) {
+    console.error("Error creating database:", error);
+  }
+};
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
@@ -28,6 +54,7 @@ export default function RootLayout() {
   }
 
   return (
+
     <ThemeProvider>
       <AuthProvider>
         <Stack>
@@ -38,6 +65,22 @@ export default function RootLayout() {
           </Stack>
         <StatusBar style={colorScheme === 'dark' ? 'light' : 'dark'} />
       </AuthProvider>
+
+    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+      <SQLiteProvider databaseName="test.db" onInit={createDbIfNeeded}>
+        <Stack>
+        <Stack.Screen name='index'
+          options={{
+            headerTitle: "Testing",
+            headerRight: () => <Button onPress={() => console.log("Pressed")} title="Log In" />,
+          }}
+          />
+          <Stack.Screen name="auth/Login" />
+          <Stack.Screen name="+not-found" />
+        </Stack>
+      </SQLiteProvider>
+      <StatusBar style="auto" />
+
     </ThemeProvider>
   );
 }
