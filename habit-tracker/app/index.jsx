@@ -180,7 +180,6 @@ const App = () => {
       </View>
     </PaperProvider>
   )
-}
 
 // roughly follows this color scheme
 // https://coolors.co/393e41-d3d0cb-e2c044-587b7f-1e2019

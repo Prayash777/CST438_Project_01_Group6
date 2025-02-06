@@ -1,23 +1,13 @@
 import { useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
-import { useRouter } from 'expo-router';
+import { useNavigation, useRouter } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
-
-const Signup = () => {
-  const router = useRouter();
-  const [formData, setFormData] = useState({
-    username: '',
-
-// import { SQLiteDatabase, SQLiteProvider } from "expo-sqlite";
-// import { useSQLiteContext } from "expo-sqlite";
-
-// const database = useSQLiteContext();
 
 interface SignupFormData {
   email: string;
   password: string;
   confirmPassword: string;
+  username: string;
 }
 
 export default function Signup() {
@@ -31,10 +21,10 @@ export default function Signup() {
   });
 
   const [formData, setFormData] = useState<SignupFormData>({
-
     email: '',
     password: '',
     confirmPassword: '',
+    username: ''
   });
 
   const isFormValid = () => {
@@ -48,7 +38,6 @@ export default function Signup() {
 
   const handleSubmit = async () => {
     try {
-
       if (!isFormValid()) {
         alert('Please fill in all fields');
         return;
@@ -56,6 +45,7 @@ export default function Signup() {
       if (formData.password !== formData.confirmPassword) {
         alert('Passwords do not match');
         return;
+      }
 
       const response = await fetch('/api/auth/signup', {
         method: 'POST',
@@ -65,9 +55,7 @@ export default function Signup() {
 
       if (response.ok) {
         window.location.href = '/';
-
       }
-      // TODO: Implement actual registration logic
       await AsyncStorage.setItem('username', formData.username);
       router.push('/');
     } catch (error) {
@@ -76,7 +64,6 @@ export default function Signup() {
   };
 
   return (
-
     <View style={styles.container}>
       <Text style={styles.title}>Sign Up</Text>
       <TextInput
@@ -119,7 +106,6 @@ export default function Signup() {
           style={styles.backButton}
           onPress={() => router.push('/auth/Login')}
         >
-          {/* I love arrows in plain text, huge difference */}
           ← Back
         </Text>
       </View>
@@ -153,12 +139,8 @@ export default function Signup() {
             placeholder="Confirm Password"
             className={cssStyles.input}
             required
-
-            // because I am evil:
             onPaste={(e) => {
               e.preventDefault();
-              // alerts are annoying af, it is enough to just silently prohibit pasting
-              // alert('Please type your password to confirm');
             }}
           />
         </div>
@@ -166,10 +148,9 @@ export default function Signup() {
           <button type="submit" className={`${cssStyles.button} ${cssStyles.buttonSpacing}`}>Sign Up</button>
         </div>
       </form>
-
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -196,11 +177,6 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     marginBottom: 10
   },
-
-});
-
-export default Signup;
-
   button: {
     backgroundColor: '#007AFF',
     padding: 12,

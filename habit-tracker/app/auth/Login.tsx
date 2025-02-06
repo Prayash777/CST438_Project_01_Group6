@@ -146,13 +146,13 @@ export default function Login() {
             onPress={handleSubmit}
             color={theme.colors.primary}
             disabled={!formData.email || !formData.password}
-
-        <View>
+          />
+        </View>
+        <View style={styles.buttonContainer}>
           <Button
             title="Sign Up"
             onPress={handleInsertUserAccount}
-          // onPress={() => router.push('/auth/Signup')}
-
+            // onPress={() => router.push('/auth/Signup')}
           />
         </View>
         <Button title="View User Accounts" onPress={loadData} />
@@ -166,7 +166,7 @@ export default function Login() {
         />
       </View>
     </View>
-  );
+    );
 };
 
 const styles = StyleSheet.create({
@@ -236,11 +236,3 @@ const styles = StyleSheet.create({
     padding: 10,
   },
 });
-
-export default Login; 
-
-    marginBottom: 20,
-    alignItems: 'center'
-  }
-});
-
