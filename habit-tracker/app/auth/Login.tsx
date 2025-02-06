@@ -9,12 +9,15 @@ import cssStyles from './Login.module.css';
 import { View, Text, StyleSheet, TextInput, Button } from 'react-native';
 import { useRouter, useNavigation } from 'expo-router';
 
+import { SQLiteDatabase, SQLiteProvider } from "expo-sqlite";
+import { useSQLiteContext } from "expo-sqlite";
+
 interface LoginFormData {
   email: string;
   password: string;
 }
 
-const Login = () => {
+export default function Login() {
 
   const navigation = useNavigation();
   const router = useRouter();
@@ -24,7 +27,7 @@ const Login = () => {
       display: 'none'
     }
   });
-  
+
   const [formData, setFormData] = useState<LoginFormData>({
     email: '',
     password: ''
@@ -39,7 +42,7 @@ const Login = () => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData)
       });
-      
+
       if (response.ok) {
         // home page
         window.location.href = '/';
@@ -48,6 +51,47 @@ const Login = () => {
       console.error('Login failed:', error);
     }
   };
+
+  //
+  // database components ->
+
+  // get the database from the stack
+  const database = useSQLiteContext();
+
+  // insert new user
+  const handleInsertUserAccount = async () => {
+    try {
+      const { email, password } = formData;
+      const response = await database.runAsync(
+        `INSERT INTO users (email, password) VALUES (?, ?)`,
+        [email, password]
+      );
+      console.log("Item saved successfully:", response?.changes!);
+      // router.back();
+    } catch (error) {
+      console.error("Error saving item:", error);
+    }
+  };
+
+  // get data, and just log it to the console
+  const loadData = async () => {
+    const result = await database.getAllAsync<{
+      id: number;
+      email: string;
+      password: string;
+    }>("SELECT * FROM users");
+    // setFormData(result);
+    if (result.length > 0) {
+      setFormData({
+        email: result[0].email,
+        password: result[0].password
+      });
+    }
+    console.log(result);
+  };
+
+  // <- database components 
+  //
 
   return (
     <View style={styles.loginContainer}>
@@ -70,11 +114,13 @@ const Login = () => {
           />
         </View>
         <View>
-          <Button 
+          <Button
             title="Sign Up"
-            onPress={() => router.push('/auth/Signup')}
+            onPress={handleInsertUserAccount}
+          // onPress={() => router.push('/auth/Signup')}
           />
         </View>
+        <Button title="View User Accounts" onPress={loadData} />
       </View>
     </View>
   );
@@ -121,5 +167,3 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   }
 });
-
-export default Login; 

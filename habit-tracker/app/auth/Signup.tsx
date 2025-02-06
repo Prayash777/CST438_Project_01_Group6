@@ -3,13 +3,18 @@ import cssStyles from './Login.module.css';
 import { View, Text, StyleSheet } from 'react-native';
 import { useRouter, useNavigation } from 'expo-router';
 
+// import { SQLiteDatabase, SQLiteProvider } from "expo-sqlite";
+// import { useSQLiteContext } from "expo-sqlite";
+
+// const database = useSQLiteContext();
+
 interface SignupFormData {
   email: string;
   password: string;
   confirmPassword: string;
 }
 
-const Signup = () => {    
+export default function Signup() {
   const navigation = useNavigation();
   const router = useRouter();
 
@@ -18,7 +23,7 @@ const Signup = () => {
       display: 'none'
     }
   });
-  
+
   const [formData, setFormData] = useState<SignupFormData>({
     email: '',
     password: '',
@@ -34,7 +39,7 @@ const Signup = () => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData)
       });
-      
+
       if (response.ok) {
         window.location.href = '/';
       }
@@ -46,11 +51,11 @@ const Signup = () => {
   return (
     <View style={styles.signupContainer}>
       <View style={styles.header}>
-        <Text 
+        <Text
           style={styles.backButton}
           onPress={() => router.push('/auth/Login')}
         >
-            {/* I love arrows in plain text, huge difference */}
+          {/* I love arrows in plain text, huge difference */}
           ← Back
         </Text>
       </View>
@@ -154,5 +159,3 @@ const styles = StyleSheet.create({
     padding: 10,
   },
 });
-
-export default Signup;

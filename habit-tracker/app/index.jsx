@@ -2,6 +2,8 @@ import { Image } from 'expo-image'
 import { View, Text, StyleSheet, ImageBackground } from 'react-native'
 import bannerImg from "@/assets/images/gridBackground.jpg"
 import { useEffect } from 'react'
+
+
 import { useRouter, useRootNavigationState } from 'expo-router'
 
 const app = () => {
@@ -13,7 +15,7 @@ const app = () => {
 
   useEffect(() => {
     if (!rootNavigationState?.key) return
-    
+
     // redirect to login page on load
     // we have major FOUC problem here
     // TODO: Implement async
