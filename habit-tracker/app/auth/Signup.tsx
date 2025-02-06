@@ -1,7 +1,13 @@
-import { useState, FormEvent } from 'react';
-import cssStyles from './Login.module.css';
-import { View, Text, StyleSheet } from 'react-native';
-import { useRouter, useNavigation } from 'expo-router';
+import { useState } from 'react';
+import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
+import { useRouter } from 'expo-router';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+
+const Signup = () => {
+  const router = useRouter();
+  const [formData, setFormData] = useState({
+    username: '',
 
 // import { SQLiteDatabase, SQLiteProvider } from "expo-sqlite";
 // import { useSQLiteContext } from "expo-sqlite";
@@ -25,15 +31,32 @@ export default function Signup() {
   });
 
   const [formData, setFormData] = useState<SignupFormData>({
+
     email: '',
     password: '',
-    confirmPassword: ''
+    confirmPassword: '',
   });
 
-  // TODO: DB and api
-  const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault();
+  const isFormValid = () => {
+    return (
+      formData.username.trim() !== '' &&
+      formData.email.trim() !== '' &&
+      formData.password.trim() !== '' &&
+      formData.confirmPassword.trim() !== ''
+    );
+  };
+
+  const handleSubmit = async () => {
     try {
+
+      if (!isFormValid()) {
+        alert('Please fill in all fields');
+        return;
+      }
+      if (formData.password !== formData.confirmPassword) {
+        alert('Passwords do not match');
+        return;
+
       const response = await fetch('/api/auth/signup', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -42,13 +65,54 @@ export default function Signup() {
 
       if (response.ok) {
         window.location.href = '/';
+
       }
+      // TODO: Implement actual registration logic
+      await AsyncStorage.setItem('username', formData.username);
+      router.push('/');
     } catch (error) {
-      console.error('Signup failed:', error);
+      alert('Registration failed: ' + (error as Error).message);
     }
   };
 
   return (
+
+    <View style={styles.container}>
+      <Text style={styles.title}>Sign Up</Text>
+      <TextInput
+        placeholder="Username"
+        value={formData.username}
+        onChangeText={(text) => setFormData({...formData, username: text})}
+        style={styles.input}
+      />
+      <TextInput
+        placeholder="Email"
+        value={formData.email}
+        onChangeText={(text) => setFormData({...formData, email: text})}
+        style={styles.input}
+        keyboardType="email-address"
+        autoCapitalize="none"
+      />
+      <TextInput
+        placeholder="Password"
+        value={formData.password}
+        onChangeText={(text) => setFormData({...formData, password: text})}
+        style={styles.input}
+        secureTextEntry
+      />
+      <TextInput
+        placeholder="Confirm Password"
+        value={formData.confirmPassword}
+        onChangeText={(text) => setFormData({...formData, confirmPassword: text})}
+        style={styles.input}
+        secureTextEntry
+      />
+      <Button 
+        title="Sign Up" 
+        onPress={handleSubmit}
+        disabled={!isFormValid()} 
+      />
+
     <View style={styles.signupContainer}>
       <View style={styles.header}>
         <Text
@@ -102,17 +166,18 @@ export default function Signup() {
           <button type="submit" className={`${cssStyles.button} ${cssStyles.buttonSpacing}`}>Sign Up</button>
         </div>
       </form>
+
     </View>
   );
 };
 
-// TODO: I'm still confused if styles are in the right file, what the convention for this is. still working tho.
 const styles = StyleSheet.create({
-  signupContainer: {
+  container: {
     flex: 1,
     backgroundColor: 'black',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
+    paddingTop: 100,
   },
   title: {
     color: 'white',
@@ -123,22 +188,19 @@ const styles = StyleSheet.create({
     marginTop: 50,
     padding: 10
   },
-  form: {
-    width: '100%',
-    alignItems: 'center',
-  },
-  formGroup: {
+  input: {
     width: '80%',
     maxWidth: 300,
-    marginBottom: 15,
-  },
-  input: {
-    width: '100%',
     padding: 10,
     borderRadius: 5,
     backgroundColor: 'white',
     marginBottom: 10
   },
+
+});
+
+export default Signup;
+
   button: {
     backgroundColor: '#007AFF',
     padding: 12,
@@ -159,3 +221,4 @@ const styles = StyleSheet.create({
     padding: 10,
   },
 });
+
