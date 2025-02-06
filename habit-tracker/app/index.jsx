@@ -6,6 +6,7 @@ import { Menu } from 'react-native-paper'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { PixelGrid } from '../components/PixelGrid'
 import { Card } from '../components/ui/Card'
+import { PaperProvider } from 'react-native-paper'
 
 const App = () => {
   const router = useRouter()
@@ -74,87 +75,89 @@ const App = () => {
 
   return (
     // TODO: refactor all below
-    <View style={styles.mainContainer}>
-      <TouchableOpacity 
-        style={styles.settingsButton}
-        onPress={() => router.push('settings/settings')}
-      >
-        <Ionicons name="settings-outline" size={30} color="white" />
-      </TouchableOpacity>
+    <PaperProvider>
+      <View style={styles.mainContainer}>
+        <TouchableOpacity 
+          style={styles.settingsButton}
+          onPress={() => router.push('settings/settings')}
+        >
+          <Ionicons name="settings-outline" size={30} color="white" />
+        </TouchableOpacity>
 
-      <Text style={[styles.title, { marginTop: 70 }]}>{currentTitle}</Text>
-      <Text style={styles.subtitle}>
-        Welcome to your personal habit tracker.
-      </Text>
-      
-      <TouchableOpacity 
-        style={styles.addHabitButton}
-        onPress={() => router.push('habit/add-habit')}
-      >
-        <Ionicons name="add-circle-outline" size={24} color="white" />
-        <Text style={styles.addHabitText}>Add Habit</Text>
-      </TouchableOpacity>
+        <Text style={[styles.title, { marginTop: 70 }]}>{currentTitle}</Text>
+        <Text style={styles.subtitle}>
+          Welcome to your personal habit tracker.
+        </Text>
+        
+        <TouchableOpacity 
+          style={styles.addHabitButton}
+          onPress={() => router.push('habit/add-habit')}
+        >
+          <Ionicons name="add-circle-outline" size={24} color="white" />
+          <Text style={styles.addHabitText}>Add Habit</Text>
+        </TouchableOpacity>
 
-      <View style={styles.mainContent}>
-        <ScrollView style={styles.habitList}>
-          {habits.length === 0 ? (
-            <View style={styles.emptyState}>
-              <Text style={[styles.emptyStateText, styles.emptyStateSubtext]}>
-                No habits yet
-              </Text>
-            </View>
-          ) : (
-            habits.map((habit, index) => (
-              <Card key={index} style={styles.habitCard}>
-                <View style={styles.habitHeader}>
-                  <Text style={styles.habitName}>{habit.name}</Text>
-                  <View style={styles.headerRight}>
-                    {countCheckedDays(habit.trackingData) > 0 && (
-                      <Text style={styles.streak}>
-                        {countCheckedDays(habit.trackingData)} {countCheckedDays(habit.trackingData) === 1 ? 'Day' : 'Days'} 🔥
-                      </Text>
-                    )}
-                    <Menu
-                      visible={menuVisible === index}
-                      onDismiss={() => setMenuVisible(null)}
-                      anchor={
-                        <TouchableOpacity onPress={() => setMenuVisible(index)}>
-                          <Ionicons name="ellipsis-vertical" size={20} color="#E0DDCF" />
-                        </TouchableOpacity>
-                      }
-                    >
-                      <Menu.Item 
-                        onPress={() => {
-                          setMenuVisible(null)
-                          router.push({
-                            pathname: 'habit/edit-habit',
-                            params: { habit: JSON.stringify(habit), index }
-                          })
-                        }} 
-                        title="Edit" 
-                      />
-                      <Menu.Item 
-                        onPress={() => {
-                          setMenuVisible(null)
-                          deleteHabit(index)
-                        }} 
-                        title="Delete" 
-                      />
-                    </Menu>
+        <View style={styles.mainContent}>
+          <ScrollView style={styles.habitList}>
+            {habits.length === 0 ? (
+              <View style={styles.emptyState}>
+                <Text style={[styles.emptyStateText, styles.emptyStateSubtext]}>
+                  No habits yet
+                </Text>
+              </View>
+            ) : (
+              habits.map((habit, index) => (
+                <Card key={index} style={styles.habitCard}>
+                  <View style={styles.habitHeader}>
+                    <Text style={styles.habitName}>{habit.name}</Text>
+                    <View style={styles.headerRight}>
+                      {countCheckedDays(habit.trackingData) > 0 && (
+                        <Text style={styles.streak}>
+                          {countCheckedDays(habit.trackingData)} {countCheckedDays(habit.trackingData) === 1 ? 'Day' : 'Days'} 🔥
+                        </Text>
+                      )}
+                      <Menu
+                        visible={menuVisible === index}
+                        onDismiss={() => setMenuVisible(null)}
+                        anchor={
+                          <TouchableOpacity onPress={() => setMenuVisible(index)}>
+                            <Ionicons name="ellipsis-vertical" size={20} color="#E0DDCF" />
+                          </TouchableOpacity>
+                        }
+                      >
+                        <Menu.Item 
+                          onPress={() => {
+                            setMenuVisible(null)
+                            router.push({
+                              pathname: 'habit/edit-habit',
+                              params: { habit: JSON.stringify(habit), index }
+                            })
+                          }} 
+                          title="Edit" 
+                        />
+                        <Menu.Item 
+                          onPress={() => {
+                            setMenuVisible(null)
+                            deleteHabit(index)
+                          }} 
+                          title="Delete" 
+                        />
+                      </Menu>
+                    </View>
                   </View>
-                </View>
-                <Text style={styles.habitDescription}>{habit.description}</Text>
-                <PixelGrid 
-                  trackingData={habit.trackingData}
-                  onToggle={(date) => handleToggle(index, date)}
-                  color={habit.color}
-                />
-              </Card>
-            ))
-          )}
-        </ScrollView>
+                  <Text style={styles.habitDescription}>{habit.description}</Text>
+                  <PixelGrid 
+                    trackingData={habit.trackingData}
+                    onToggle={(date) => handleToggle(index, date)}
+                    color={habit.color}
+                  />
+                </Card>
+              ))
+            )}
+          </ScrollView>
+        </View>
       </View>
-    </View>
+    </PaperProvider>
   )
 }
 
