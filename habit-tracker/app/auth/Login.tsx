@@ -4,10 +4,11 @@ TODO: Eventually, I want this app to allow users to view the default home page w
 I despise websites that force users to login before they can view the home page. Probably steers >80% of users away. -ethan
 */
 
-import { useState, FormEvent } from 'react';
-import cssStyles from './Login.module.css';
-import { View, Text, StyleSheet, TextInput, Button } from 'react-native';
+import { useState, useEffect } from 'react';
+import { View, Text, TextInput, Button, StyleSheet, Pressable, GestureResponderEvent } from 'react-native';
 import { useRouter, useNavigation } from 'expo-router';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useTheme } from '../../hooks/useTheme';
 
 interface LoginFormData {
   email: string;
@@ -18,63 +19,73 @@ const Login = () => {
 
   const navigation = useNavigation();
   const router = useRouter();
-  navigation.setOptions({
-    headerShown: false,
-    tabBarStyle: {
-      display: 'none'
-    }
-  });
   
+  useEffect(() => {
+    navigation.setOptions({
+      headerShown: false,
+      tabBarStyle: {
+        display: 'none'
+      }
+    });
+  }, [navigation]);
+
   const [formData, setFormData] = useState<LoginFormData>({
     email: '',
     password: ''
   });
 
-  const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = async () => {
     try {
-      // TODO: API!
-      const response = await fetch('/api/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData)
-      });
-      
-      if (response.ok) {
-        // home page
-        window.location.href = '/';
-      }
+      await AsyncStorage.setItem('user_email', formData.email);
+      router.push('/');
     } catch (error) {
       console.error('Login failed:', error);
+      alert('Login failed');
     }
   };
 
+  const { theme } = useTheme();
+
   return (
-    <View style={styles.loginContainer}>
-      <Text style={styles.title}>Login to Track Today!</Text>
+    <View style={[styles.loginContainer, { backgroundColor: theme.colors.background }]}>
+      <Text style={[styles.appTitle, { color: theme.colors.text }]}>Habit Tracker</Text>
+      <Text style={[styles.title, { color: theme.colors.text }]}>Welcome Back!</Text>
       <View style={styles.form}>
-        <View>
+        <View style={styles.formGroup}>
           <TextInput
             value={formData.email}
-            onChangeText={(e) => setFormData({ ...formData, email: e })}
+            onChangeText={(text) => setFormData({ ...formData, email: text })}
             placeholder="Email"
-            style={styles.input}
+            style={[styles.input, { backgroundColor: theme.colors.card }]}
+            placeholderTextColor={theme.colors.text}
           />
         </View>
-        <View>
+        <View style={styles.formGroup}>
           <TextInput
             value={formData.password}
-            onChangeText={(e) => setFormData({ ...formData, password: e })}
-            placeholder="Password"
-            style={styles.input}
+            onChangeText={(text) => setFormData({ ...formData, password: text })}
+            placeholder="Password" 
+            style={[styles.input, { backgroundColor: theme.colors.card }]}
+            placeholderTextColor={theme.colors.text}
+            secureTextEntry
           />
         </View>
-        <View>
+        <View style={styles.buttonContainer}>
           <Button 
-            title="Sign Up"
-            onPress={() => router.push('/auth/Signup')}
+            title="Login"
+            onPress={handleSubmit}
+            color={theme.colors.primary}
+            disabled={!formData.email || !formData.password}
           />
         </View>
+      </View>
+      <View style={styles.signupContainer}>
+        <Text style={[styles.signupText, { color: theme.colors.text }]}>Don't have an account?</Text>
+        <Button 
+          title="Sign Up"
+          onPress={() => router.push('/auth/Signup')}
+          color={theme.colors.primary}
+        />
       </View>
     </View>
   );
@@ -87,13 +98,20 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  appTitle: {
+    color: 'white',
+    fontSize: 40,
+    fontWeight: 'bold',
+    marginBottom: 10,
+    textAlign: 'center',
+    marginTop: 50,
+  },
   title: {
     color: 'white',
     fontSize: 32,
     fontWeight: 'bold',
     marginBottom: 30,
     textAlign: 'center',
-    marginTop: 50,
     padding: 10
   },
   form: {
@@ -112,14 +130,32 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     marginBottom: 10
   },
-  button: {
-    backgroundColor: '#007AFF',
-    padding: 12,
-    borderRadius: 5,
+  buttonContainer: {
+    width: '80%',
+    maxWidth: 300,
+    marginTop: 10,
+  },
+  signupContainer: {
+    position: 'absolute',
+    bottom: 40,
     width: '100%',
-    marginBottom: 20,
-    alignItems: 'center'
-  }
+    alignItems: 'center',
+  },
+  signupText: {
+    color: 'white',
+    marginBottom: 10,
+  },
+  header: {
+    position: 'absolute',
+    top: 60,
+    left: 20,
+    zIndex: 1,
+  },
+  backButton: {
+    color: 'white',
+    fontSize: 18,
+    padding: 10,
+  },
 });
 
 export default Login; 
