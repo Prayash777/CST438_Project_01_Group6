@@ -56,14 +56,14 @@ const App = () => {
       tabBarStyle: { display: 'none' }
     })
 
-  //   if (!rootNavigationState?.key) return
+    if (!rootNavigationState?.key) return
 
-  //   // redirect to login page on load
-  //   // we have major FOUC problem here
-  //   // TODO: Implement async
-  //   // TODO: Implement isLoading state
-  //   router.replace('/auth/Login')
-  // }, [rootNavigationState?.key])
+    // redirect to login page on load
+    // we have major FOUC problem here
+    // TODO: Implement async
+    // TODO: Implement isLoading state
+    // router.replace('/auth/Login')
+  }, [rootNavigationState?.key])
 
   useEffect(() => {
     const loadHabits = async () => {
