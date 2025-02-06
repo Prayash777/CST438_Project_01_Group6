@@ -7,7 +7,7 @@ import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect } from 'react';
 import { AuthProvider } from '../hooks/useAuth'
-import { ThemeProvider } from '../hooks/useTheme'
+//import { ThemeProvider } from '../hooks/useTheme'
 
 // database import
 import { SQLiteDatabase, SQLiteProvider } from "expo-sqlite";

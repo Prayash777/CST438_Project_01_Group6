@@ -1,5 +1,5 @@
 
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Alert } from 'react-native'
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Alert, ImageBackground } from 'react-native'
 import { useEffect, useState } from 'react'
 import { useRouter, useNavigation } from 'expo-router'
 import { Ionicons } from '@expo/vector-icons'
@@ -10,9 +10,9 @@ import { Card } from '../components/ui/Card'
 import { PaperProvider } from 'react-native-paper'
 
 import { Image } from 'expo-image'
-import { View, Text, StyleSheet, ImageBackground } from 'react-native'
+//import { View, Text, StyleSheet, ImageBackground } from 'react-native'
 import bannerImg from "@/assets/images/gridBackground.jpg"
-import { useEffect } from 'react'
+//import { useEffect } from 'react'
 
 
 import { useRouter, useRootNavigationState } from 'expo-router'
