@@ -10,6 +10,7 @@ import 'react-native-reanimated';
 import { SQLiteDatabase, SQLiteProvider } from "expo-sqlite";
 
 import { useColorScheme } from '@/hooks/useColorScheme';
+import { Button } from 'react-native';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -56,6 +57,12 @@ export default function RootLayout() {
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
       <SQLiteProvider databaseName="test.db" onInit={createDbIfNeeded}>
         <Stack>
+        <Stack.Screen name='index'
+          options={{
+            headerTitle: "Testing",
+            headerRight: () => <Button onPress={() => console.log("Pressed")} title="Log In" />,
+          }}
+          />
           <Stack.Screen name="auth/Login" />
           <Stack.Screen name="+not-found" />
         </Stack>
