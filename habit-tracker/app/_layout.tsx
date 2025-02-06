@@ -7,7 +7,6 @@ import { AuthProvider } from '../hooks/useAuth'
 import { ThemeProvider } from '../hooks/useTheme'
 import { useColorScheme } from '@/hooks/useColorScheme';
 
-
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
