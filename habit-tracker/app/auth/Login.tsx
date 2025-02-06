@@ -8,22 +8,29 @@ import { useState, useEffect } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, Pressable, GestureResponderEvent } from 'react-native';
 import { useRouter, useNavigation } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useTheme } from '../../hooks/useTheme';
-
-import { SQLiteDatabase, SQLiteProvider } from "expo-sqlite";
-import { useSQLiteContext } from "expo-sqlite";
+import { useTheme, ThemeProvider } from '../../hooks/useTheme';
+import { SQLiteDatabase, SQLiteProvider, useSQLiteContext } from "expo-sqlite";
 
 interface LoginFormData {
   email: string;
   password: string;
 }
 
-export default function Login() {
+interface LoginContentProps {
+  formData: LoginFormData;
+  setFormData: React.Dispatch<React.SetStateAction<LoginFormData>>;
+  database: SQLiteDatabase;
+  router: any; // or import Router type from expo-router if available
+}
 
+export default function Login() {
   const navigation = useNavigation();
   const router = useRouter();
+  const [formData, setFormData] = useState<LoginFormData>({
+    email: '',
+    password: ''
+  });
 
-  
   useEffect(() => {
     navigation.setOptions({
       headerShown: false,
@@ -33,68 +40,50 @@ export default function Login() {
     });
   }, [navigation]);
 
-  navigation.setOptions({
-    headerShown: false,
-    tabBarStyle: {
-      display: 'none'
-    }
-  });
+  return (
+    <ThemeProvider>
+      <SQLiteProvider databaseName="habit-tracker.db">
+        <LoginContentWrapper formData={formData} setFormData={setFormData} router={router} />
+      </SQLiteProvider>
+    </ThemeProvider>
+  );
+}
 
+// Create a wrapper component to use the SQLite context
+function LoginContentWrapper({ formData, setFormData, router }: Omit<LoginContentProps, 'database'>) {
+  const database = useSQLiteContext();
+  return <LoginContent formData={formData} setFormData={setFormData} database={database} router={router} />;
+}
 
-  const [formData, setFormData] = useState<LoginFormData>({
-    email: '',
-    password: ''
-  });
+function LoginContent({ formData, setFormData, database, router }: LoginContentProps) {
+  const { theme } = useTheme();
 
   const handleSubmit = async () => {
     try {
-
       await AsyncStorage.setItem('user_email', formData.email);
-      router.push('/');
-
-      // TODO: API!
-      const response = await fetch('/api/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData)
-      });
-
-      if (response.ok) {
-        // home page
-        window.location.href = '/';
-      }
-
+      
+      // TODO: Implement actual API authentication
+      router.push('../index');
     } catch (error) {
       console.error('Login failed:', error);
       alert('Login failed');
     }
   };
 
-
-  const { theme } = useTheme();
-
-  //
-  // database components ->
-
-  // get the database from the stack
-  const database = useSQLiteContext();
-
-  // insert new user
   const handleInsertUserAccount = async () => {
     try {
       const { email, password } = formData;
-      const response = await database.runAsync(
+      await database.runAsync(
         `INSERT INTO users (email, password) VALUES (?, ?)`,
         [email, password]
       );
-      console.log("Item saved successfully:", response?.changes!);
-      // router.back();
+      router.push('/'); // Navigate after successful signup
     } catch (error) {
-      console.error("Error saving item:", error);
+      console.error("Error creating account:", error);
+      alert("Failed to create account");
     }
   };
 
-  // get data, and just log it to the console
   const loadData = async () => {
     const result = await database.getAllAsync<{
       id: number;
@@ -110,10 +99,6 @@ export default function Login() {
     }
     console.log(result);
   };
-
-  // <- database components 
-  //
-
 
   return (
     <View style={[styles.loginContainer, { backgroundColor: theme.colors.background }]}>
@@ -146,16 +131,10 @@ export default function Login() {
             onPress={handleSubmit}
             color={theme.colors.primary}
             disabled={!formData.email || !formData.password}
-
-        <View>
-          <Button
-            title="Sign Up"
-            onPress={handleInsertUserAccount}
-          // onPress={() => router.push('/auth/Signup')}
-
           />
         </View>
-        <Button title="View User Accounts" onPress={loadData} />
+        <View style={styles.buttonContainer}>
+        </View>
       </View>
       <View style={styles.signupContainer}>
         <Text style={[styles.signupText, { color: theme.colors.text }]}>Don't have an account?</Text>
@@ -236,11 +215,3 @@ const styles = StyleSheet.create({
     padding: 10,
   },
 });
-
-export default Login; 
-
-    marginBottom: 20,
-    alignItems: 'center'
-  }
-});
-
