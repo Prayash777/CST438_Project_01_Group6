@@ -60,29 +60,50 @@ function LoginContent({ formData, setFormData, database, router }: LoginContentP
   const { theme } = useTheme();
 
   const handleSubmit = async () => {
-    try {
-      await AsyncStorage.setItem('user_email', formData.email);
+    // try {
+    //   await AsyncStorage.setItem('user_email', formData.email);
       
-      // TODO: Implement actual API authentication
-      router.push('../index');
-    } catch (error) {
-      console.error('Login failed:', error);
-      alert('Login failed');
-    }
-  };
+    //   // TODO: Implement actual API authentication
+    //   router.push('../index');
+    // } catch (error) {
+    //   console.error('Login failed:', error);
+    //   alert('Login failed');
+    // }
 
-  const handleInsertUserAccount = async () => {
-    try {
-      const { email, password } = formData;
-      await database.runAsync(
-        `INSERT INTO users (email, password) VALUES (?, ?)`,
-        [email, password]
-      );
-      router.push('/'); // Navigate after successful signup
-    } catch (error) {
-      console.error("Error creating account:", error);
-      alert("Failed to create account");
+    //NEW CODE
+  try{
+    const result = await database.getAllAsync<{id: number; email: string; password: string}>(
+      "SELECT * FROM users WHERE email = ?", [formData.email]
+    );
+    if(result.length == 0){
+      alert("User not found");
+      return;
     }
+    const user = result[0];
+    if(user.password == formData.password){
+      await AsyncStorage.setItem('user_email', formData.email);
+      router.push('/habit/add-habit.tsx');
+    }else{
+    alert("Incorrect password");
+    setFormData({ email: '', password: '' });
+    }
+  } catch(error){
+    console.error('Login failed', error);
+    alert('Login failed: Email or password is not correct');
+    setFormData({ email: '', password: '' });
+  }
+  // const handleInsertUserAccount = async () => {
+  //   try {
+  //     const { email, password } = formData;
+  //     await database.runAsync(
+  //       `INSERT INTO users (email, password) VALUES (?, ?)`,
+  //       [email, password]
+  //     );
+  //     router.push('/'); // Navigate after successful signup
+  //   } catch (error) {
+  //     console.error("Error creating account:", error);
+  //     alert("Failed to create account");
+  //   }
   };
 
   const loadData = async () => {
