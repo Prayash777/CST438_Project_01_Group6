@@ -1,9 +1,4 @@
-<<<<<<< HEAD
-
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Alert, ImageBackground } from 'react-native'
-=======
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Alert } from 'react-native'
->>>>>>> origin/api
 import { useEffect, useState } from 'react'
 import { useRouter, useNavigation } from 'expo-router'
 import { Ionicons } from '@expo/vector-icons'
@@ -12,19 +7,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import { PixelGrid } from '../components/PixelGrid'
 import { Card } from '../components/ui/Card'
 import { PaperProvider } from 'react-native-paper'
-<<<<<<< HEAD
-
-import { Image } from 'expo-image'
-//import { View, Text, StyleSheet, ImageBackground } from 'react-native'
-import bannerImg from "@/assets/images/gridBackground.jpg"
-//import { useEffect } from 'react'
-
-
-import { useRouter, useRootNavigationState } from 'expo-router'
-
-=======
 import { useRootNavigationState } from 'expo-router'
->>>>>>> origin/api
 
 const App = () => {
   const router = useRouter()

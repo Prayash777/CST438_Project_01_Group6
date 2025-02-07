@@ -36,17 +36,24 @@ export default function RootLayout() {
   const colorScheme = useColorScheme();
   const [loaded] = useFonts({
     SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
+    Montserrat: require('../assets/fonts/Montserrat-VariableFont_wght.ttf'),
+    Lato: require('../assets/fonts/Lato-Black.ttf'),
   });
 
   useEffect(() => {
-	export default function RootLayout() {
+    if (loaded) {
+      SplashScreen.hideAsync();
+    }
+  }, [loaded]);
+
+  if (!loaded) {
+    return null;
   }
 
   const db = openDatabaseSync('test.db');
   createDbIfNeeded(db);
 
   return (
-    <ThemeProvider>
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
       <AuthProvider>
         <Stack>
@@ -57,4 +64,4 @@ export default function RootLayout() {
       </AuthProvider>
     </ThemeProvider>
   );
-});
+}
