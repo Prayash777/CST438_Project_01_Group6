@@ -103,7 +103,7 @@ const App = () => {
         
         <TouchableOpacity 
           style={styles.addHabitButton}
-          onPress={() => router.push('habit/add-habit')}
+          onPress={() => router.push('/auth/Login')}
         >
           <Ionicons name="add-circle-outline" size={24} color="white" />
           <Text style={styles.addHabitText}>Add Habit</Text>

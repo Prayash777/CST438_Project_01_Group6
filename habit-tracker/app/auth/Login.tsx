@@ -5,11 +5,12 @@ I despise websites that force users to login before they can view the home page.
 */
 
 import { useState, useEffect } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, Pressable, GestureResponderEvent } from 'react-native';
+import { View, Text, TextInput, Button, StyleSheet, Pressable, GestureResponderEvent,TouchableOpacity } from 'react-native';
 import { useRouter, useNavigation } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useTheme, ThemeProvider } from '../../hooks/useTheme';
 import { SQLiteDatabase, SQLiteProvider, useSQLiteContext } from "expo-sqlite";
+import { Ionicons } from '@expo/vector-icons';
 
 interface LoginFormData {
   email: string;
@@ -41,11 +42,11 @@ export default function Login() {
   }, [navigation]);
 
   return (
-    <ThemeProvider>
-      <SQLiteProvider databaseName="habit-tracker.db">
-        <LoginContentWrapper formData={formData} setFormData={setFormData} router={router} />
-      </SQLiteProvider>
-    </ThemeProvider>
+    <><ThemeProvider>
+        <SQLiteProvider databaseName="habit-tracker.db">
+          <LoginContentWrapper formData={formData} setFormData={setFormData} router={router} />
+        </SQLiteProvider>
+      </ThemeProvider></>
   );
 }
 
@@ -102,6 +103,14 @@ function LoginContent({ formData, setFormData, database, router }: LoginContentP
 
   return (
     <View style={[styles.loginContainer, { backgroundColor: theme.colors.background }]}>
+     <TouchableOpacity 
+             style={styles.backButton}
+             onPress={() => router.back()}
+           >
+             <Ionicons name="arrow-back" size={30} color="black" />
+           </TouchableOpacity>
+
+
       <Text style={[styles.appTitle, { color: theme.colors.text }]}>Habit Tracker</Text>
       <Text style={[styles.title, { color: theme.colors.text }]}>Welcome Back!</Text>
       <View style={styles.form}>
@@ -210,8 +219,9 @@ const styles = StyleSheet.create({
     zIndex: 1,
   },
   backButton: {
-    color: 'white',
-    fontSize: 18,
-    padding: 10,
+    position: 'absolute',
+    top: 70,
+    left: 20,
+    zIndex: 1,
   },
 });
