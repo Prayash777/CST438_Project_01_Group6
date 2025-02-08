@@ -47,14 +47,16 @@ export default function EditHabit() {
       const existingHabits = await AsyncStorage.getItem('@habits')
       const habits = existingHabits ? JSON.parse(existingHabits) : []
       
-      habits[Number(id)] = habitData
+      habits[Number(id)] = {
+        ...habits[Number(id)],
+        ...habitData,
+      }
       
       await AsyncStorage.setItem('@habits', JSON.stringify(habits))
+      router.back()
     } catch (error) {
       console.error('Error updating habit:', error)
     }
-
-    router.back()
   }
 
   return (

@@ -157,7 +157,7 @@ const App = () => {
                             setMenuVisible(null)
                             router.push({
                               pathname: 'habit/edit-habit',
-                              params: { habit: JSON.stringify(habit), index }
+                              params: { id: index }
                             })
                           }} 
                           title="Edit" 
@@ -166,7 +166,7 @@ const App = () => {
                           onPress={() => {
                             setMenuVisible(null)
                             deleteHabit(index)
-                          }} 
+                          }}
                           title="Delete" 
                         />
                       </Menu>
