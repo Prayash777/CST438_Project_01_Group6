@@ -12,7 +12,7 @@ Project 1 - Android based API app
 ### How to run this app:
 
 1. Clone the repository
-- `git clone https://github.com/Prayash777/CST438_Project_01_Group6.git && cd CST438-Project_01_Group6`
+- `git clone https://github.com/Prayash777/CST438_Project_01_Group6.git && cd CST438-Project_01_Group6/habit-tracker`
 
 2. Install dependencies
 - `npm install`
