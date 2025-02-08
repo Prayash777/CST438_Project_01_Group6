@@ -23,3 +23,6 @@ Project 1 - Android based API app
 
 4. Scan the QR code with the Expo Go app on your phone or press `a` to run on an android emulator
 
+---
+
+

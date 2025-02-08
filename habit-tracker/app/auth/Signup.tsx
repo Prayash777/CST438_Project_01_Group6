@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useLayoutEffect } from 'react';
 import { View, Text, TextInput, StyleSheet } from 'react-native';
 import { router, useNavigation, useRouter } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -13,9 +13,12 @@ interface SignupFormData {
 
 export default function Signup() {
   const navigation = useNavigation();
-  navigation.setOptions({
-    headerShown: false
-  })
+  
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerShown: false
+    });
+  }, [navigation]);
 
   const [formData, setFormData] = useState<SignupFormData>({
     email: '',
