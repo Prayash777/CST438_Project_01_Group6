@@ -2,7 +2,6 @@ import React from 'react'
 import { View, Text, Pressable, StyleSheet } from 'react-native'
 import { Link, router, Stack } from 'expo-router'
 import { Ionicons } from '@expo/vector-icons'
-import { useTheme } from '../../hooks/useTheme'
 import { Card } from '../../components/ui/Card'
 
 export default function Settings() {
@@ -15,24 +14,22 @@ export default function Settings() {
 }
 
 function SettingsContent() {
-  const { theme } = useTheme()
-  
   return (
-    <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
+    <View style={[styles.container]}>
       <Pressable 
         style={styles.backButton}
         onPress={() => router.back()}
       >
-        <Ionicons name="arrow-back" size={30} color={theme.colors.text} />
+        <Ionicons name="arrow-back" size={30} color="white" />
       </Pressable>
 
-      <Text style={[styles.title, { color: theme.colors.text }]}>Settings</Text>
+      <Text style={[styles.title]}>Settings</Text>
       
       <Card style={styles.menuItem}>
         <Link href="/settings/account" asChild>
           <Pressable style={styles.menuContent}>
-            <Ionicons name="person-outline" size={24} color={theme.colors.text} />
-            <Text style={[styles.menuText, { color: theme.colors.text }]}>Account Settings</Text>
+            <Ionicons name="person-outline" size={24} color="white" />
+            <Text style={[styles.menuText]}>Account Settings</Text>
           </Pressable>
         </Link>
       </Card>

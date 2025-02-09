@@ -5,10 +5,9 @@ I despise websites that force users to login before they can view the home page.
 */
 
 import { useState, useEffect } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, Pressable, GestureResponderEvent,TouchableOpacity } from 'react-native';
+import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity } from 'react-native';
 import { useRouter, useNavigation } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useTheme, ThemeProvider } from '../../hooks/useTheme';
 import { SQLiteDatabase, SQLiteProvider, useSQLiteContext } from "expo-sqlite";
 import { Ionicons } from '@expo/vector-icons';
 
@@ -42,11 +41,9 @@ export default function Login() {
   }, [navigation]);
 
   return (
-    <><ThemeProvider>
-        <SQLiteProvider databaseName="habit-tracker.db">
-          <LoginContentWrapper formData={formData} setFormData={setFormData} router={router} />
-        </SQLiteProvider>
-      </ThemeProvider></>
+    <SQLiteProvider databaseName="habit-tracker.db">
+      <LoginContentWrapper formData={formData} setFormData={setFormData} router={router} />
+    </SQLiteProvider>
   );
 }
 
@@ -57,8 +54,6 @@ function LoginContentWrapper({ formData, setFormData, router }: Omit<LoginConten
 }
 
 function LoginContent({ formData, setFormData, database, router }: LoginContentProps) {
-  const { theme } = useTheme();
-
   const handleSubmit = async () => {
     // try {
     //   await AsyncStorage.setItem('user_email', formData.email);
@@ -92,21 +87,9 @@ function LoginContent({ formData, setFormData, database, router }: LoginContentP
     alert('Login failed: Email or password is not correct');
     setFormData({ email: '', password: '' });
   }
-  // const handleInsertUserAccount = async () => {
-  //   try {
-  //     const { email, password } = formData;
-  //     await database.runAsync(
-  //       `INSERT INTO users (email, password) VALUES (?, ?)`,
-  //       [email, password]
-  //     );
-  //     router.push('/'); // Navigate after successful signup
-  //   } catch (error) {
-  //     console.error("Error creating account:", error);
-  //     alert("Failed to create account");
-  //   }
   };
 
-  const loadData = async () => {
+  const loadData = async () => { 
     const result = await database.getAllAsync<{
       id: number;
       email: string;
@@ -123,25 +106,25 @@ function LoginContent({ formData, setFormData, database, router }: LoginContentP
   };
 
   return (
-    <View style={[styles.loginContainer, { backgroundColor: theme.colors.background }]}>
-     <TouchableOpacity 
-             style={styles.backButton}
-             onPress={() => router.back()}
-           >
-             <Ionicons name="arrow-back" size={30} color="black" />
-           </TouchableOpacity>
+    <View style={[styles.loginContainer]}>
+      <View style={styles.header}>
+              <Text
+                style={styles.backButton}
+                onPress={() => router.push('/')}
+              >
+                ← Back
+              </Text>
+            </View>
 
-
-      <Text style={[styles.appTitle, { color: theme.colors.text }]}>Habit Tracker</Text>
-      <Text style={[styles.title, { color: theme.colors.text }]}>Welcome Back!</Text>
+      <Text style={[styles.appTitle]}>Habit Tracker</Text>
+      <Text style={[styles.title]}>Welcome Back!</Text>
       <View style={styles.form}>
         <View style={styles.formGroup}>
           <TextInput
             value={formData.email}
             onChangeText={(text) => setFormData({ ...formData, email: text })}
             placeholder="Email"
-            style={[styles.input, { backgroundColor: theme.colors.card }]}
-            placeholderTextColor={theme.colors.text}
+            style={[styles.input]}
           />
         </View>
         <View style={styles.formGroup}>
@@ -149,8 +132,7 @@ function LoginContent({ formData, setFormData, database, router }: LoginContentP
             value={formData.password}
             onChangeText={(text) => setFormData({ ...formData, password: text })}
             placeholder="Password" 
-            style={[styles.input, { backgroundColor: theme.colors.card }]}
-            placeholderTextColor={theme.colors.text}
+            style={[styles.input]}
             secureTextEntry
           />
         </View>
@@ -159,7 +141,7 @@ function LoginContent({ formData, setFormData, database, router }: LoginContentP
           <Button 
             title="Login"
             onPress={handleSubmit}
-            color={theme.colors.primary}
+            color="white"
             disabled={!formData.email || !formData.password}
           />
         </View>
@@ -167,11 +149,10 @@ function LoginContent({ formData, setFormData, database, router }: LoginContentP
         </View>
       </View>
       <View style={styles.signupContainer}>
-        <Text style={[styles.signupText, { color: theme.colors.text }]}>Don't have an account?</Text>
+        <Text style={[styles.signupText]}>Don't have an account?</Text>
         <Button 
           title="Sign Up"
           onPress={() => router.push('/auth/Signup')}
-          color={theme.colors.primary}
         />
       </View>
     </View>
@@ -187,14 +168,15 @@ const styles = StyleSheet.create({
   },
   appTitle: {
     color: 'white',
+    fontFamily: 'Lato',
     fontSize: 40,
     fontWeight: 'bold',
     marginBottom: 10,
     textAlign: 'center',
-    marginTop: 50,
   },
   title: {
     color: 'white',
+    fontFamily: 'Lato',
     fontSize: 32,
     fontWeight: 'bold',
     marginBottom: 30,
@@ -240,9 +222,11 @@ const styles = StyleSheet.create({
     zIndex: 1,
   },
   backButton: {
-    position: 'absolute',
-    top: 70,
-    left: 20,
-    zIndex: 1,
+    color: 'white',
+    fontSize: 18,
+    padding: 10,
+    borderWidth: 1,
+    borderColor: 'white',
+    borderRadius: 5,
   },
 });

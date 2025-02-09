@@ -1,7 +1,10 @@
-import { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
-import { useNavigation, useRouter } from 'expo-router';
+import { useState, useLayoutEffect, useEffect } from 'react';
+import { View, Text, TextInput, StyleSheet } from 'react-native';
+import { router, useNavigation, useRouter } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { SQLiteDatabase, SQLiteProvider, useSQLiteContext } from "expo-sqlite";
+
+import { Button } from '../../components/ui/Button';
 
 interface SignupFormData {
   email: string;
@@ -10,15 +13,22 @@ interface SignupFormData {
   username: string;
 }
 
+interface SignupContentProps {
+  formData: SignupFormData;
+  setFormData: React.Dispatch<React.SetStateAction<SignupFormData>>;
+  database: SQLiteDatabase;
+  router: any; // or import Router type from expo-router if available
+}
+
 export default function Signup() {
   const navigation = useNavigation();
   const router = useRouter();
 
-  navigation.setOptions({
-    tabBarStyle: {
-      display: 'none'
-    }
-  });
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerShown: false
+    });
+  }, [navigation]);
 
   const [formData, setFormData] = useState<SignupFormData>({
     email: '',
@@ -26,7 +36,21 @@ export default function Signup() {
     confirmPassword: '',
     username: ''
   });
+ 
+  
 
+return (
+    <SQLiteProvider databaseName="habit-tracker.db">
+      <SignupContentWrapper formData={formData} setFormData={setFormData} router={router} />
+    </SQLiteProvider>
+  );
+}
+function SignupContentWrapper({ formData, setFormData, router }: Omit<SignupContentProps, 'database'>) {
+  const database = useSQLiteContext();
+  return <SignupContent formData={formData} setFormData={setFormData} database={database} router={router} />;
+}
+
+function SignupContent({ formData, setFormData, database, router }: SignupContentProps){
   const isFormValid = () => {
     return (
       formData.username.trim() !== '' &&
@@ -35,33 +59,82 @@ export default function Signup() {
       formData.confirmPassword.trim() !== ''
     );
   };
-
-  const handleSubmit = async () => {
-    try {
-      if (!isFormValid()) {
-        alert('Please fill in all fields');
-        return;
+  useEffect(() => {
+    // Create the 'users' table if it doesn't already exist
+    const createTable = async () => {
+      try {
+        await database.execAsync(
+          `CREATE TABLE IF NOT EXISTS users (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            username TEXT NOT NULL,
+            email TEXT NOT NULL,
+            password TEXT NOT NULL
+          )`
+        );
+        console.log("Users table created or already exists.");
+      } catch (error) {
+        console.error("Error creating table:", error);
       }
-      if (formData.password !== formData.confirmPassword) {
-        alert('Passwords do not match');
-        return;
-      }
+    };
 
-      const response = await fetch('/api/auth/signup', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData)
-      });
-
-      if (response.ok) {
-        window.location.href = '/';
-      }
-      await AsyncStorage.setItem('username', formData.username);
-      router.push('/');
-    } catch (error) {
-      alert('Registration failed: ' + (error as Error).message);
+    createTable();
+  }, [database]);
+  const handleSubmit = async () => { 
+    if (!isFormValid()) {
+      alert('Please fill in all fields');
+      return;
     }
-  }
+    if (formData.password !== formData.confirmPassword) {
+      alert('Passwords do not match');
+      return;
+    }
+      
+    try {
+      // Insert user data into SQLite database
+      const { email, password, username } = formData;
+      await database.runAsync(
+       `INSERT INTO users (username, email, password) VALUES (?, ?, ?)`,
+        [username, email, password]
+      );
+  
+        // Optionally, you can also store the username in AsyncStorage
+      await AsyncStorage.setItem('username', formData.username);
+  
+        // Navigate to home screen or dashboard after successful signup
+      router.push('/');
+      } catch (error) {
+        console.error('Error inserting user:', error);
+        alert('Failed to create account');
+      }
+    };
+
+  //     const response = await fetch('/api/auth/signup', {
+  //       method: 'POST',
+  //       headers: { 'Content-Type': 'application/json' },
+  //       body: JSON.stringify(formData)
+  //     });
+
+  //     if (response.ok) {
+  //       window.location.href = '/';
+  //     }
+  //     await AsyncStorage.setItem('username', formData.username);
+  //     router.push('/');
+  //   } catch (error) {
+  //     alert('Registration failed: ' + (error as Error).message);
+  //   }
+  //   const handleInsertUserAccount = async () => {
+  //   try {
+  //     const { email, password } = formData;
+  //     await database.runAsync(
+  //       `INSERT INTO users (email, password) VALUES (?, ?)`,
+  //       [email, password]
+  //     );
+  //     router.push('/'); // Navigate after successful signup
+  //   } catch (error) {
+  //     console.error("Error creating account:", error);
+  //     alert("Failed to create account");
+  //   }
+
 
   return (
     <View style={styles.container}>
@@ -103,10 +176,11 @@ export default function Signup() {
         secureTextEntry
       />
       <Button 
-        title="Sign Up" 
         onPress={handleSubmit}
         disabled={!isFormValid()} 
-      />
+      >
+        Sign Up
+      </Button>
     </View>
   );
 }
@@ -137,7 +211,7 @@ const styles = StyleSheet.create({
     marginBottom: 10
   },
   button: {
-    backgroundColor: '#007AFF',
+    backgroundColor: 'black',
     padding: 12,
     borderRadius: 5,
     width: '100%',
@@ -154,6 +228,9 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 18,
     padding: 10,
+    borderWidth: 1,
+    borderColor: 'white',
+    borderRadius: 5,
   },
 });
 

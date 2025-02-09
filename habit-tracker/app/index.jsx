@@ -18,6 +18,11 @@ const App = () => {
   const [currentTitle, setCurrentTitle] = useState('One Day at a Time')
 
   const titles = [
+    'Track Your Habits!', // Have the this title appear more often :D
+    'Track Your Habits!',
+    'Track Your Habits!',
+    'Track Your Habits!',
+    'Track Your Habits!',
     'One Day at a Time',
     'Small Steps, Big Changes', 
     'Building Better Habits',
@@ -27,7 +32,17 @@ const App = () => {
     'Daily Check-In',
     'Consistency is Key',
     'Track & Grow',
-    'Your Journey'
+    'Your Journey',
+    'Every Step Counts',
+    'Building Your Future',
+    'Making It Happen',
+    'Steady Progress',
+    'Keep the Streak',
+    'Small Wins Matter',
+    'Your Daily Journey',
+    'Growing Every Day',
+    'Stay Committed',
+    'Forward Motion'
   ]
 
   useEffect(() => {
@@ -142,7 +157,7 @@ const App = () => {
                             setMenuVisible(null)
                             router.push({
                               pathname: 'habit/edit-habit',
-                              params: { habit: JSON.stringify(habit), index }
+                              params: { id: index }
                             })
                           }} 
                           title="Edit" 
@@ -151,7 +166,7 @@ const App = () => {
                           onPress={() => {
                             setMenuVisible(null)
                             deleteHabit(index)
-                          }} 
+                          }}
                           title="Delete" 
                         />
                       </Menu>

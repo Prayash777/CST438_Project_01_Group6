@@ -7,18 +7,21 @@ Project 1 - Android based API app
 - Ezequiel Reyes
 - Noah Mckegney
  
-- testing ssh push - noah
-
-
 ---
 
-### API candidates/requirements
+### How to run this app:
 
-- persistent habit tracking data (local db)
-- Time and date handling
-- Data visualization
-- OAUTH?
-- Users/sign in/up
+1. Clone the repository
+- `git clone https://github.com/Prayash777/CST438_Project_01_Group6.git && cd CST438-Project_01_Group6/habit-tracker`
+
+2. Install dependencies
+- `npm install`
+- if that doesn't work, try `npm install --legacy-peer-deps` or `npm install --force`
+
+3. Run the app
+- `npm start`
+
+4. Scan the QR code with the Expo Go app on your phone or press `a` to run on an android emulator
 
 ---
 
