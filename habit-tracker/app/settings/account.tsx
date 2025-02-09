@@ -6,11 +6,9 @@ import { Input } from '../../components/ui/Input'
 import { Card } from '../../components/ui/Card'
 import { router, useNavigation } from 'expo-router'
 import { Ionicons } from '@expo/vector-icons'
-import { useTheme } from '../../hooks/useTheme'
 
 export default function AccountSettings() {
   const navigation = useNavigation()  
-  const { theme } = useTheme()
 
   useEffect(() => {
     navigation.setOptions({
@@ -21,7 +19,7 @@ export default function AccountSettings() {
     });
   }, [navigation]);
 
-  const { username, token, updateUser, deleteAccount } = useAuth()
+  const { username, updateUser, deleteAccount } = useAuth()
   const [isEditing, setIsEditing] = useState(false)
   const [message, setMessage] = useState({ type: '', text: '' })
   const [formData, setFormData] = useState({
@@ -65,16 +63,16 @@ export default function AccountSettings() {
   }
 
   return (
-    <View style={[styles.container, { backgroundColor: theme.colors.background }]}>
+    <View style={[styles.container]}>
       <TouchableOpacity 
         style={styles.backButton}
         onPress={() => router.back()}
       >
-        <Ionicons name="arrow-back" size={30} color={theme.colors.text} />
+        <Ionicons name="arrow-back" size={30} color="white" />
       </TouchableOpacity>
-      <Text style={[styles.title, { color: theme.colors.text }]}>Account Settings</Text>
+      <Text style={[styles.title]}>Account Settings</Text>
       
-      <Card style={[styles.cardContent, { backgroundColor: theme.colors.card }]}>
+      <Card style={[styles.cardContent]}>
         {message.text && (
           <View style={[styles.alert, message.type === 'error' ? styles.alertError : styles.alertSuccess]}>
             <Text style={styles.alertText}>{message.text}</Text>
@@ -83,7 +81,7 @@ export default function AccountSettings() {
 
         <View style={styles.form}>
           <View style={styles.formGroup}>
-            <Text style={[styles.label, { color: theme.colors.text }]}>Name</Text>
+            <Text style={[styles.label]}>Name</Text>
             <Input
               value={formData.name}
               editable={isEditing}
@@ -92,7 +90,7 @@ export default function AccountSettings() {
           </View>
           
           <View style={styles.formGroup}>
-            <Text style={[styles.label, { color: theme.colors.text }]}>Email</Text>
+            <Text style={[styles.label]}>Email</Text>
             <Input
               value={formData.email}
               editable={isEditing}
@@ -119,7 +117,7 @@ export default function AccountSettings() {
         </View>
       </Card>
 
-      <Card style={[styles.cardContent, styles.dangerZone, { backgroundColor: theme.colors.card }]}>
+      <Card style={[styles.cardContent, styles.dangerZone]}>
         <Button 
           variant="danger"
           onPress={handleDelete}

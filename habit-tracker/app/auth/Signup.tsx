@@ -1,7 +1,8 @@
-import { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
-import { useNavigation, useRouter } from 'expo-router';
+import { useState, useLayoutEffect } from 'react';
+import { View, Text, TextInput, StyleSheet } from 'react-native';
+import { router, useNavigation, useRouter } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Button } from '../../components/ui/Button';
 
 interface SignupFormData {
   email: string;
@@ -12,13 +13,12 @@ interface SignupFormData {
 
 export default function Signup() {
   const navigation = useNavigation();
-  const router = useRouter();
-
-  navigation.setOptions({
-    tabBarStyle: {
-      display: 'none'
-    }
-  });
+  
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerShown: false
+    });
+  }, [navigation]);
 
   const [formData, setFormData] = useState<SignupFormData>({
     email: '',
@@ -103,10 +103,11 @@ export default function Signup() {
         secureTextEntry
       />
       <Button 
-        title="Sign Up" 
         onPress={handleSubmit}
         disabled={!isFormValid()} 
-      />
+      >
+        Sign Up
+      </Button>
     </View>
   );
 }
@@ -137,7 +138,7 @@ const styles = StyleSheet.create({
     marginBottom: 10
   },
   button: {
-    backgroundColor: '#007AFF',
+    backgroundColor: 'black',
     padding: 12,
     borderRadius: 5,
     width: '100%',
@@ -154,6 +155,9 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 18,
     padding: 10,
+    borderWidth: 1,
+    borderColor: 'white',
+    borderRadius: 5,
   },
 });
 
