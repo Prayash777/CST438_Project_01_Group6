@@ -87,7 +87,20 @@ const App = () => {
       console.error('Error updating habit:', error)
     }
   }
-
+  
+  const handleAddHabit = async () => {
+    try {
+      const userToken = await AsyncStorage.getItem('@user_token'); // Assuming you store a token
+      if (userToken) {
+        router.push('/habit/add-habit'); // Redirect to add habit screen
+      } else {
+        router.push('/auth/Login'); // Redirect to login screen
+      }
+    } catch (error) {
+      console.error('Error checking user login:', error);
+    }
+  };
+  
   const deleteHabit = async (index) => {
     try {
       const updatedHabits = habits.filter((_, i) => i !== index)

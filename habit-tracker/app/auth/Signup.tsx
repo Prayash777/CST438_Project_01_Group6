@@ -79,6 +79,7 @@ function SignupContent({ formData, setFormData, database, router }: SignupConten
 
     createTable();
   }, [database]);
+
   const handleSubmit = async () => { 
     if (!isFormValid()) {
       alert('Please fill in all fields');
@@ -93,10 +94,15 @@ function SignupContent({ formData, setFormData, database, router }: SignupConten
       // Insert user data into SQLite database
       const { email, password, username } = formData;
       await database.runAsync(
-       `INSERT INTO users (username, email, password) VALUES (?, ?, ?)`,
+        `INSERT INTO users (username, email, password) VALUES (?, ?, ?)`,
         [username, email, password]
       );
-  
+      
+      //TEST
+      console.log("User inserted successfully!");
+      const users = await database.getAllAsync("SELECT * FROM users");
+    console.log("Users in DB:", users);
+    
         // Optionally, you can also store the username in AsyncStorage
       await AsyncStorage.setItem('username', formData.username);
   

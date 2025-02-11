@@ -55,16 +55,6 @@ function LoginContentWrapper({ formData, setFormData, router }: Omit<LoginConten
 
 function LoginContent({ formData, setFormData, database, router }: LoginContentProps) {
   const handleSubmit = async () => {
-    // try {
-    //   await AsyncStorage.setItem('user_email', formData.email);
-      
-    //   // TODO: Implement actual API authentication
-    //   router.push('../index');
-    // } catch (error) {
-    //   console.error('Login failed:', error);
-    //   alert('Login failed');
-    // }
-
     //NEW CODE
   try{
     const result = await database.getAllAsync<{id: number; email: string; password: string}>(
@@ -77,7 +67,7 @@ function LoginContent({ formData, setFormData, database, router }: LoginContentP
     const user = result[0];
     if(user.password == formData.password){
       await AsyncStorage.setItem('user_email', formData.email);
-      router.push('/habit/add-habit.tsx');
+      router.push('/habit/add-habit');
     }else{
     alert("Incorrect password");
     setFormData({ email: '', password: '' });
