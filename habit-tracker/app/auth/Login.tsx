@@ -66,8 +66,11 @@ function LoginContent({ formData, setFormData, database, router }: LoginContentP
     }
     const user = result[0];
     if(user.password == formData.password){
-      await AsyncStorage.setItem('user_email', formData.email);
-      router.push('/habit/add-habit');
+      await AsyncStorage.setItem('@user_email', formData.email);
+      await AsyncStorage.setItem('@user_id', user.id.toString());
+      console.log('Email stored successfully:', formData.email);
+      console.log('Email stored successfully:', user.id.toString());
+      router.push('/');
     }else{
     alert("Incorrect password");
     setFormData({ email: '', password: '' });

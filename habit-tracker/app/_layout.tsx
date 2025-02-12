@@ -12,7 +12,7 @@ import { openDatabaseSync, SQLiteDatabase } from 'expo-sqlite';
 SplashScreen.preventAutoHideAsync();
 
 // creating the sqlite database
-const colorScheme = useColorScheme();
+//const colorScheme = useColorScheme();
 const createDbIfNeeded = async (db: SQLiteDatabase) => {
   console.log("Creating database");
   try {

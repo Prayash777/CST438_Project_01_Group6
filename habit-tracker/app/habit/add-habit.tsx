@@ -6,6 +6,7 @@ import { Button } from '../../components/ui/Button'
 import { Input } from '../../components/ui/Input'
 import { Card } from '../../components/ui/Card'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import { getUser } from '@/services/authServices'
 
 export default function AddHabit() {
   const navigation = useNavigation()
@@ -28,6 +29,16 @@ export default function AddHabit() {
     color: '#4CAF50'
   })
 
+  //It is used as a unique id.
+  const getUserEmail = async () => {
+    try {
+      const userEmail = await AsyncStorage.getItem('@user_email')// get it from your login page
+      return userEmail;
+    } catch (error) {
+      console.error('Error retrieving user email:', error)
+      return null;
+    }
+  }
   const handleSubmit = async () => {
     const trackingData: Record<string, boolean> = {}
     const today = new Date()
@@ -43,17 +54,27 @@ export default function AddHabit() {
     }
 
     try {
-      const existingHabits = await AsyncStorage.getItem('@habits')
+
+      const userEmail = await getUserEmail()
+
+      if(!userEmail){
+        alert('No user logged in')
+        return
+      }
+      //creating a unique key
+       const userHabitsKey = `@habits_${userEmail}`
+
+      const existingHabits = await AsyncStorage.getItem(userHabitsKey)
       const habits = existingHabits ? JSON.parse(existingHabits) : []
       
       habits.push(newHabit)
       
-      await AsyncStorage.setItem('@habits', JSON.stringify(habits))
+      await AsyncStorage.setItem(userHabitsKey, JSON.stringify(habits))
     } catch (error) {
       console.error('Error saving habit:', error)
     }
 
-    router.back()
+    router.push('/')
   }
 
   return (
