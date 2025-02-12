@@ -6,7 +6,6 @@ import { Button } from '../../components/ui/Button'
 import { Input } from '../../components/ui/Input'
 import { Card } from '../../components/ui/Card'
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import { getUser } from '@/services/authServices'
 
 export default function AddHabit() {
   const navigation = useNavigation()
@@ -83,7 +82,7 @@ export default function AddHabit() {
         style={styles.backButton}
         onPress={() => router.back()}
       >
-        <Ionicons name="arrow-back" size={30} color="black" />
+        <Ionicons name="arrow-back" size={30} color="white" />
       </TouchableOpacity>
 
       <Text style={styles.title}>Add New Habit</Text>
@@ -93,6 +92,7 @@ export default function AddHabit() {
           value={habitData.name}
           onChangeText={(text) => setHabitData({...habitData, name: text})}
           placeholder="Enter habit name"
+          style={styles.input}
         />
 
         <Input
@@ -100,6 +100,7 @@ export default function AddHabit() {
           onChangeText={(text) => setHabitData({...habitData, description: text})}
           placeholder="Enter description"
           multiline
+          style={styles.input}
         />
 
         <View style={styles.colorPicker}>
@@ -130,24 +131,44 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
-    backgroundColor: '#fff',
+    backgroundColor: '#121420',
     paddingTop: 60,
   },
   title: {
-    fontSize: 24,
+    fontSize: 28,
     fontWeight: 'bold',
     marginBottom: 32,
     marginTop: 20,
+    color: '#B76D68',
+    fontFamily: 'Lato',
+    textAlign: 'center',
   },
   form: {
     padding: 16,
     gap: 16,
+    backgroundColor: '#2C2B3C',
+    borderRadius: 5,
+    borderWidth: 1,
+    borderColor: '#403F4C',
+  },
+  input: {
+    width: '100%',
+    padding: 10,
+    borderRadius: 5,
+    borderWidth: 1,
+    borderColor: '#403F4C',
+    color: 'white',
+    backgroundColor: '#2C2B3C',
+    marginBottom: 10,
   },
   button: {
     marginTop: 16,
+    backgroundColor: '#B76D68',
+    padding: 12,
+    borderRadius: 5,
   },
   backButton: {
-    color: 'black',
+    color: 'white',
     fontSize: 18,
     padding: 10,
   },
@@ -164,7 +185,6 @@ const styles = StyleSheet.create({
     height: 30,
     borderRadius: 15,
     borderWidth: 1,
-    borderColor: '#ddd',
     elevation: 2,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 1 },
@@ -173,6 +193,6 @@ const styles = StyleSheet.create({
   },
   selectedColor: {
     borderWidth: 2,
-    borderColor: '#000',
+    borderColor: 'white',
   },
 })

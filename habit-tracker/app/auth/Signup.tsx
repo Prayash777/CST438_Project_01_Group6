@@ -191,17 +191,29 @@ function SignupContent({ formData, setFormData, database, router }: SignupConten
   );
 }
 
+// https://coolors.co/403f4c-2c2b3c-1b2432-121420-b76d68
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'black',
+    backgroundColor: '#121420',
     alignItems: 'center',
-    justifyContent: 'flex-start',
-    paddingTop: 100,
+    justifyContent: 'center',
+  },
+  header: {
+    position: 'absolute',
+    top: 60,
+    left: 20,
+    zIndex: 1,
+  },
+  backButton: {
+    color: '#B76D68',
+    fontSize: 18,
+    padding: 10,
   },
   title: {
-    color: 'white',
-    fontSize: 32,
+    color: '#403F4C',
+    fontFamily: 'Lato',
+    fontSize: 28,
     fontWeight: 'bold',
     marginBottom: 30,
     textAlign: 'center',
@@ -213,30 +225,8 @@ const styles = StyleSheet.create({
     maxWidth: 300,
     padding: 10,
     borderRadius: 5,
-    backgroundColor: 'white',
-    marginBottom: 10
-  },
-  button: {
-    backgroundColor: 'black',
-    padding: 12,
-    borderRadius: 5,
-    width: '100%',
-    marginBottom: 20,
-    alignItems: 'center'
-  },
-  header: {
-    position: 'absolute',
-    top: 60,
-    left: 20,
-    zIndex: 1,
-  },
-  backButton: {
     color: 'white',
-    fontSize: 18,
-    padding: 10,
-    borderWidth: 1,
-    borderColor: 'white',
-    borderRadius: 5,
-  },
+    backgroundColor: '#2C2B3C',
+    marginBottom: 10
+  }
 });
-

@@ -48,7 +48,6 @@ function SettingsContent() {
       <View style={styles.signOutContainer}>
         <Pressable 
           style={styles.signOutButton}
-          //onPress={() => router.replace('/auth/Login')}
           onPress = {handleSignOut}
         >
           <Ionicons name="log-out-outline" size={24} color="#FF3B30" />
@@ -64,53 +63,58 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 16,
     paddingTop: 60,
+    backgroundColor: '#121420',
   },
   title: {
-    fontSize: 24,
+    fontSize: 28,
     fontWeight: 'bold',
     marginVertical: 20,
+    color: 'white',
+    fontFamily: 'Lato',
   },
   menuItem: {
     padding: 16,
-    backgroundColor: '#f5f5f5',
-    borderRadius: 12,
+    backgroundColor: '#2C2B3C',
+    borderRadius: 5,
     marginBottom: 12,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
   },
   menuContent: {
     flexDirection: 'row',
     alignItems: 'center',
   },
   menuText: {
-    fontSize: 18,
+    fontSize: 16,
     marginLeft: 12,
     fontWeight: '500',
+    color: 'white',
+    fontFamily: 'Lato',
   },
   backButton: {
     padding: 10,
+    color: 'white',
   },
   signOutContainer: {
     marginTop: 'auto',
     marginBottom: 20,
+    width: '80%',
+    maxWidth: 300,
+    alignSelf: 'center',
   },
   signOutButton: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    padding: 16,
-    backgroundColor: '#FFF',
-    borderRadius: 12,
+    padding: 12,
+    backgroundColor: '#2C2B3C',
+    borderRadius: 5,
     borderWidth: 1,
     borderColor: '#FF3B30',
   },
   signOutText: {
     marginLeft: 12,
-    fontSize: 18,
-    fontWeight: '500',
+    fontSize: 16,
+    fontWeight: 'bold',
     color: '#FF3B30',
+    fontFamily: 'Lato',
   },
 })
