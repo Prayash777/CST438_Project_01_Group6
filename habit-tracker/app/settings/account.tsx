@@ -117,9 +117,10 @@ export default function AccountSettings() {
         </View>
       </Card>
 
-      <Card style={[styles.cardContent, styles.dangerZone]}>
+      <Card style={[styles.deleteCard]}>
         <Button 
           variant="danger"
+          style={styles.deleteButton}
           onPress={handleDelete}
         >
           Delete Account
@@ -137,32 +138,47 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     width: '100%',
     paddingTop: 48,
+    backgroundColor: '#121420',
   },
   title: {
-    fontSize: 24,
+    fontSize: 28,
     fontWeight: 'bold',
-    marginBottom: 24,
+    marginBottom: 34,
+    color: 'white',
+    fontFamily: 'Lato',
   },
   cardContent: {
     padding: 16,
     marginBottom: 24,
+    backgroundColor: '#2C2B3C',
+    borderWidth: 1,
+    borderColor: '#403F4C',
+  },
+  deleteCard: {
+    backgroundColor: '#1D1C2C',
+    borderWidth: 1,
+    borderColor: '#403F4C',
+    padding: 16,
+    marginVertical: 375,
+  },
+  deleteButton: {
+    width: '100%',
   },
   form: {
     gap: 16,
   },
   formGroup: {
     marginBottom: 16,
+    width: '100%',
   },
   label: {
     marginBottom: 4,
     fontSize: 16,
+    color: 'white',
   },
   buttonGroup: {
     flexDirection: 'row',
     gap: 8,
-  },
-  dangerZone: {
-    backgroundColor: '#FEF2F2',
   },
   alert: {
     padding: 12,
@@ -170,15 +186,16 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   alertSuccess: {
-    backgroundColor: '#D1FAE5',
+    backgroundColor: '#1C3A2B',
   },
   alertError: {
-    backgroundColor: '#FEE2E2',
+    backgroundColor: '#3A2828',
   },
   alertText: {
-    color: '#000000',
+    color: 'white',
   },
   backButton: {
-    padding: 10,
+    padding: 20,
+    color: 'white',
   },
 })

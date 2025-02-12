@@ -155,15 +155,6 @@ const App = () => {
           Welcome to your personal habit tracker.
         </Text>
         
-        <TouchableOpacity 
-          style={styles.addHabitButton}
-          //onPress={() => router.push('/auth/Login')}
-          onPress={handleAddHabit}
-        >
-          <Ionicons name="add-circle-outline" size={24} color="white" />
-          <Text style={styles.addHabitText}>Add Habit</Text>
-        </TouchableOpacity>
-
         <View style={styles.mainContent}>
           <ScrollView style={styles.habitList}>
             {habits.length === 0 ? (
@@ -223,6 +214,13 @@ const App = () => {
             )}
           </ScrollView>
         </View>
+
+        <TouchableOpacity 
+          style={styles.fab}
+          onPress={handleAddHabit}
+        >
+          <Ionicons name="add" size={30} color="white" />
+        </TouchableOpacity>
       </View>
     </PaperProvider>
   )
@@ -234,7 +232,7 @@ export default App
 // https://coolors.co/393e41-d3d0cb-e2c044-587b7f-1e2019
 const styles = StyleSheet.create({
   title: {
-    color: '#D3D0CB',
+    color: '#B76D68',
     fontSize: 30,
     fontFamily: 'Lato',
     marginTop: 70,
@@ -243,7 +241,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   subtitle: {
-    color: '#888',
+    color: '#403F4C',
     fontFamily: 'Lato',
     fontSize: 16,
     textAlign: 'center',
@@ -253,11 +251,11 @@ const styles = StyleSheet.create({
   },
   mainContainer: {
     flex: 1,
-    backgroundColor: '#1E2019',
+    backgroundColor: '#121420',
     alignItems: 'center',
   },
   mainContent: {
-    backgroundColor: "#587B7F",
+    backgroundColor: "#2C2B3C",
     width: '90%',
     flexGrow: 0,
     flexShrink: 1,
@@ -268,7 +266,7 @@ const styles = StyleSheet.create({
   habitCard: {
     marginBottom: 12,
     padding: 12,
-    backgroundColor: '#343633',
+    backgroundColor: '#121420',
     borderRadius: 10,
   },
   settingsButton: {
@@ -276,22 +274,6 @@ const styles = StyleSheet.create({
     top: 50,
     right: 20,
     zIndex: 1,
-  },
-  addHabitButton: {
-    backgroundColor: '#E2C044',
-    paddingVertical: 7,
-    paddingHorizontal: 16,
-    borderRadius: 20,
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-    marginTop: 20,
-    marginBottom: 20,
-  },
-  addHabitText: {
-    color: 'white',
-    fontSize: 16,
-    fontWeight: '500',
   },
   habitList: {
     padding: 16,
@@ -338,5 +320,21 @@ const styles = StyleSheet.create({
     color: '#888',
     fontSize: 16,
     marginTop: 8,
+  },
+  fab: {
+    position: 'absolute',
+    bottom: 25,
+    right: 25,
+    backgroundColor: '#B76D68',
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    justifyContent: 'center',
+    alignItems: 'center',
+    elevation: 4,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
   },
 })

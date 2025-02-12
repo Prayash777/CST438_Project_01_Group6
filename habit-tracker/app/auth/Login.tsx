@@ -5,7 +5,7 @@ I despise websites that force users to login before they can view the home page.
 */
 
 import { useState, useEffect } from 'react';
-import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
+import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity } from 'react-native';
 import { useRouter, useNavigation } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { SQLiteDatabase, SQLiteProvider, useSQLiteContext } from "expo-sqlite";
@@ -99,15 +99,6 @@ function LoginContent({ formData, setFormData, database, router }: LoginContentP
 
   return (
     <View style={[styles.loginContainer]}>
-      <View style={styles.header}>
-              <Text
-                style={styles.backButton}
-                onPress={() => router.push('/')}
-              >
-                ← Back
-              </Text>
-            </View>
-
       <Text style={[styles.appTitle]}>Habit Tracker</Text>
       <Text style={[styles.title]}>Welcome Back!</Text>
       <View style={styles.form}>
@@ -130,12 +121,16 @@ function LoginContent({ formData, setFormData, database, router }: LoginContentP
         </View>
 
         <View style={styles.buttonContainer}>
-          <Button 
-            title="Login"
+          <TouchableOpacity 
             onPress={handleSubmit}
-            color="white"
             disabled={!formData.email || !formData.password}
-          />
+            style={[
+              styles.loginButton,
+              (!formData.email || !formData.password) && styles.loginButtonDisabled
+            ]}
+          >
+            <Text style={styles.loginButtonText}>Login</Text>
+          </TouchableOpacity>
         </View>
         <View style={styles.buttonContainer}>
         </View>
@@ -151,15 +146,17 @@ function LoginContent({ formData, setFormData, database, router }: LoginContentP
   );
 };
 
+
+// https://coolors.co/403f4c-2c2b3c-1b2432-121420-b76d68
 const styles = StyleSheet.create({
   loginContainer: {
     flex: 1,
-    backgroundColor: 'black',
+    backgroundColor: '#121420',
     alignItems: 'center',
     justifyContent: 'center',
   },
   appTitle: {
-    color: 'white',
+    color: '#B76D68',
     fontFamily: 'Lato',
     fontSize: 40,
     fontWeight: 'bold',
@@ -167,9 +164,9 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   title: {
-    color: 'white',
+    color: '#403F4C',
     fontFamily: 'Lato',
-    fontSize: 32,
+    fontSize: 28,
     fontWeight: 'bold',
     marginBottom: 30,
     textAlign: 'center',
@@ -188,7 +185,8 @@ const styles = StyleSheet.create({
     width: '100%',
     padding: 10,
     borderRadius: 5,
-    backgroundColor: 'white',
+    color: 'white',
+    backgroundColor: '#2C2B3C',
     marginBottom: 10
   },
   buttonContainer: {
@@ -200,25 +198,26 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 40,
     width: '100%',
-
     alignItems: 'center',
   },
   signupText: {
     color: 'white',
     marginBottom: 10,
   },
-  header: {
-    position: 'absolute',
-    top: 60,
-    left: 20,
-    zIndex: 1,
-  },
-  backButton: {
-    color: 'white',
-    fontSize: 18,
-    padding: 10,
-    borderWidth: 1,
-    borderColor: 'white',
+  loginButton: {
+    backgroundColor: '#B76D68',
+    padding: 12,
     borderRadius: 5,
+    width: '100%',
+    alignItems: 'center',
+  },
+  loginButtonDisabled: {
+    backgroundColor: '#B76D68',
+    opacity: 0.5,
+  },
+  loginButtonText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: 'bold',
   },
 });

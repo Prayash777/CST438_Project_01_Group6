@@ -65,7 +65,7 @@ export default function EditHabit() {
         style={styles.backButton}
         onPress={() => router.back()}
       >
-        <Ionicons name="arrow-back" size={30} color="black" />
+        <Ionicons name="arrow-back" size={30} color="white" />
       </TouchableOpacity>
 
       <Text style={styles.title}>Edit Habit</Text>
@@ -75,6 +75,7 @@ export default function EditHabit() {
           value={habitData.name}
           onChangeText={(text) => setHabitData({...habitData, name: text})}
           placeholder="Enter habit name"
+          style={styles.input}
         />
 
         <Input
@@ -82,9 +83,13 @@ export default function EditHabit() {
           onChangeText={(text) => setHabitData({...habitData, description: text})}
           placeholder="Enter description"
           multiline
+          style={styles.input}
         />
 
-        <Button onPress={handleSubmit} style={styles.button}>
+        <Button 
+          onPress={handleSubmit} 
+          style={styles.updateButton}
+        >
           Update Habit
         </Button>
       </Card>
@@ -96,24 +101,49 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
-    backgroundColor: '#fff',
+    backgroundColor: '#121420',
     paddingTop: 60,
   },
   title: {
-    fontSize: 24,
+    fontSize: 28,
     fontWeight: 'bold',
     marginBottom: 32,
     marginTop: 20,
+    color: '#B76D68',
+    textAlign: 'center',
   },
   form: {
     padding: 16,
     gap: 16,
+    backgroundColor: '#2C2B3C',
+    width: '100%',
+    alignItems: 'center',
   },
-  button: {
+  input: {
+    width: '100%',
+    padding: 10,
+    borderRadius: 5,
+    borderWidth: 1,
+    borderColor: '#403F4C',
+    color: 'white',
+    backgroundColor: '#2C2B3C',
+    marginBottom: 10,
+  },
+  updateButton: {
+    backgroundColor: '#B76D68',
+    padding: 12,
+    borderRadius: 5,
+    width: '100%',
+    alignItems: 'center',
     marginTop: 16,
   },
+  buttonText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
   backButton: {
-    color: 'black',
+    color: 'white',
     fontSize: 18,
     padding: 10,
   },
