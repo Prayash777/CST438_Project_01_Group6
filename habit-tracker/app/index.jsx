@@ -111,7 +111,6 @@ const App = () => {
     try {
       const userToken = await AsyncStorage.getItem('@user_email'); // Assuming you store a token
       console.log('Stored Email:', userToken);
-      // alert(userToken);
       if (userToken) {
         router.push('/habit/add-habit'); // Redirect to add habit screen
       } else {
