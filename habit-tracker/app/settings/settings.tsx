@@ -31,7 +31,7 @@ function SettingsContent() {
         style={styles.backButton}
         onPress={() => router.back()}
       >
-        <Ionicons name="arrow-back" size={30} color="white" />
+        <Ionicons name="arrow-back" size={30} color="black" />
       </Pressable>
 
       <Text style={[styles.title]}>Settings</Text>
