@@ -3,6 +3,7 @@ import { View, Text, Pressable, StyleSheet } from 'react-native'
 import { Link, router, Stack } from 'expo-router'
 import { Ionicons } from '@expo/vector-icons'
 import { Card } from '../../components/ui/Card'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function Settings() {
   return (
@@ -12,6 +13,16 @@ export default function Settings() {
     </>
   )
 }
+const handleSignOut = async () => {
+  try {
+    await AsyncStorage.removeItem('@user_email'); // Clear the stored token
+    console.log('User signed out successfully');
+    //setHabits([]);
+    router.replace('/'); // Redirect to login screen
+  } catch (error) {
+    console.error('Error signing out:', error);
+  }
+};
 
 function SettingsContent() {
   return (
@@ -37,7 +48,8 @@ function SettingsContent() {
       <View style={styles.signOutContainer}>
         <Pressable 
           style={styles.signOutButton}
-          onPress={() => router.replace('/auth/Login')}
+          //onPress={() => router.replace('/auth/Login')}
+          onPress = {handleSignOut}
         >
           <Ionicons name="log-out-outline" size={24} color="#FF3B30" />
           <Text style={styles.signOutText}>Sign Out</Text>

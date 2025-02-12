@@ -5,10 +5,11 @@ I despise websites that force users to login before they can view the home page.
 */
 
 import { useState, useEffect } from 'react';
-import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
+import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity } from 'react-native';
 import { useRouter, useNavigation } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { SQLiteDatabase, SQLiteProvider, useSQLiteContext } from "expo-sqlite";
+import { Ionicons } from '@expo/vector-icons';
 
 interface LoginFormData {
   email: string;
@@ -54,32 +55,34 @@ function LoginContentWrapper({ formData, setFormData, router }: Omit<LoginConten
 
 function LoginContent({ formData, setFormData, database, router }: LoginContentProps) {
   const handleSubmit = async () => {
-    try {
-      await AsyncStorage.setItem('user_email', formData.email);
-      
-      // TODO: Implement actual API authentication
-      router.push('../index');
-    } catch (error) {
-      console.error('Login failed:', error);
-      alert('Login failed');
+    //NEW CODE
+  try{
+    const result = await database.getAllAsync<{id: number; email: string; password: string}>(
+      "SELECT * FROM users WHERE email = ?", [formData.email]
+    );
+    if(result.length == 0){
+      alert("User not found");
+      return;
     }
+    const user = result[0];
+    if(user.password == formData.password){
+      await AsyncStorage.setItem('@user_email', formData.email);
+      await AsyncStorage.setItem('@user_id', user.id.toString());
+      console.log('Email stored successfully:', formData.email);
+      console.log('Email stored successfully:', user.id.toString());
+      router.push('/');
+    }else{
+    alert("Incorrect password");
+    setFormData({ email: '', password: '' });
+    }
+  } catch(error){
+    console.error('Login failed', error);
+    alert('Login failed: Email or password is not correct');
+    setFormData({ email: '', password: '' });
+  }
   };
 
-  const handleInsertUserAccount = async () => {
-    try {
-      const { email, password } = formData;
-      await database.runAsync(
-        `INSERT INTO users (email, password) VALUES (?, ?)`,
-        [email, password]
-      );
-      router.push('/'); // Navigate after successful signup
-    } catch (error) {
-      console.error("Error creating account:", error);
-      alert("Failed to create account");
-    }
-  };
-
-  const loadData = async () => {
+  const loadData = async () => { 
     const result = await database.getAllAsync<{
       id: number;
       email: string;
@@ -97,6 +100,15 @@ function LoginContent({ formData, setFormData, database, router }: LoginContentP
 
   return (
     <View style={[styles.loginContainer]}>
+      <View style={styles.header}>
+              <Text
+                style={styles.backButton}
+                onPress={() => router.push('/')}
+              >
+                ← Back
+              </Text>
+            </View>
+
       <Text style={[styles.appTitle]}>Habit Tracker</Text>
       <Text style={[styles.title]}>Welcome Back!</Text>
       <View style={styles.form}>
@@ -206,5 +218,8 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 18,
     padding: 10,
+    borderWidth: 1,
+    borderColor: 'white',
+    borderRadius: 5,
   },
 });

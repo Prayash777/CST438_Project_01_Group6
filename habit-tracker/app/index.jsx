@@ -55,27 +55,46 @@ const App = () => {
     })
 
     if (!rootNavigationState?.key) return
-
-    // redirect to login page on load
-    // we have major FOUC problem here
-    // TODO: Implement async
-    // TODO: Implement isLoading state
-    // router.replace('/auth/Login')
+    
   }, [rootNavigationState?.key])
 
+  //This gets the user_email(unique), which was set in login.
   useEffect(() => {
     const loadHabits = async () => {
       try {
-        const stored = await AsyncStorage.getItem('@habits')
-        if (stored) setHabits(JSON.parse(stored))
+        const userEmail = await AsyncStorage.getItem('@user_email');
+        //const stored = await AsyncStorage.getItem('@habits')
+        if (!userEmail) {
+          setHabits([]); // Clear habits if no user is logged in
+        } else {
+          const userHabitsKey = `@habits_${userEmail}`; //habit for the email
+          const stored = await AsyncStorage.getItem(userHabitsKey);
+          if (stored) setHabits(JSON.parse(stored));
+        }
       } catch (error) {
-        console.error('Error loading habits:', error)
+        console.error('Error loading habits:', error);
       }
-    }
+    };
 
     const unsubscribe = navigation.addListener('focus', loadHabits)
     return unsubscribe
   }, [navigation])
+  
+  useEffect(() => {
+    const checkUserLogin = async () => {
+      try {
+        const userEmail = await AsyncStorage.getItem('@user_email');
+        if (!userEmail) {
+          setHabits([]); // Clear habits if the user is not logged in
+          router.replace('/auth/Login'); // Redirects to login screen
+        } 
+      } catch (error) {
+        console.error('Error checking login status:', error);
+      }
+    };
+  
+    checkUserLogin();
+  }, [rootNavigationState?.key]);
 
   const handleToggle = async (index, date) => {
     try {
@@ -87,16 +106,37 @@ const App = () => {
       console.error('Error updating habit:', error)
     }
   }
-
+  
+  const handleAddHabit = async () => {
+    try {
+      const userToken = await AsyncStorage.getItem('@user_email'); // Assuming you store a token
+      console.log('Stored Email:', userToken);
+      alert(userToken);
+      if (userToken) {
+        router.push('/habit/add-habit'); // Redirect to add habit screen
+      } else {
+        router.push('/auth/Login'); // Redirect to login screen
+      }
+    } catch (error) {
+      console.error('Error checking user login:', error);
+    }
+  };
+  
   const deleteHabit = async (index) => {
     try {
-      const updatedHabits = habits.filter((_, i) => i !== index)
-      setHabits(updatedHabits)
-      await AsyncStorage.setItem('@habits', JSON.stringify(updatedHabits))
+      const updatedHabits = habits.filter((_, i) => i !== index);
+      setHabits(updatedHabits);
+
+      const userEmail = await AsyncStorage.getItem('@user_email');
+      if (userEmail) {
+        const userHabitsKey = `@habits_${userEmail}`;
+        await AsyncStorage.setItem(userHabitsKey, JSON.stringify(updatedHabits));
+      }
     } catch (error) {
-      console.error('Error deleting habit:', error)
+      console.error('Error deleting habit:', error);
     }
-  }
+  };
+
 
   const countCheckedDays = trackingData => Object.values(trackingData).filter(Boolean).length
 
@@ -118,7 +158,8 @@ const App = () => {
         
         <TouchableOpacity 
           style={styles.addHabitButton}
-          onPress={() => router.push('habit/add-habit')}
+          //onPress={() => router.push('/auth/Login')}
+          onPress={handleAddHabit}
         >
           <Ionicons name="add-circle-outline" size={24} color="white" />
           <Text style={styles.addHabitText}>Add Habit</Text>
