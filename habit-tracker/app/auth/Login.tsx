@@ -5,11 +5,10 @@ I despise websites that force users to login before they can view the home page.
 */
 
 import { useState, useEffect } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
 import { useRouter, useNavigation } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { SQLiteDatabase, SQLiteProvider, useSQLiteContext } from "expo-sqlite";
-import { Ionicons } from '@expo/vector-icons';
 
 interface LoginFormData {
   email: string;
