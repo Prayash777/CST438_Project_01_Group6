@@ -6,6 +6,12 @@ import { SQLiteDatabase, SQLiteProvider, useSQLiteContext } from "expo-sqlite";
 
 import { Button } from '../../components/ui/Button';
 
+import database from "../db/database";
+import { insertUser, getAllUsers } from '../db/database';
+
+// testing
+// 
+
 interface SignupFormData {
   email: string;
   password: string;
@@ -36,21 +42,19 @@ export default function Signup() {
     confirmPassword: '',
     username: ''
   });
- 
-  
 
-return (
+  return (
     <SQLiteProvider databaseName="habit-tracker.db">
       <SignupContentWrapper formData={formData} setFormData={setFormData} router={router} />
     </SQLiteProvider>
   );
 }
 function SignupContentWrapper({ formData, setFormData, router }: Omit<SignupContentProps, 'database'>) {
-  const database = useSQLiteContext();
+  // const database = useSQLiteContext();
   return <SignupContent formData={formData} setFormData={setFormData} database={database} router={router} />;
 }
 
-function SignupContent({ formData, setFormData, database, router }: SignupContentProps){
+function SignupContent({ formData, setFormData, database, router }: SignupContentProps) {
   const isFormValid = () => {
     return (
       formData.username.trim() !== '' &&
@@ -59,28 +63,32 @@ function SignupContent({ formData, setFormData, database, router }: SignupConten
       formData.confirmPassword.trim() !== ''
     );
   };
-  useEffect(() => {
-    // Create the 'users' table if it doesn't already exist
-    const createTable = async () => {
-      try {
-        await database.execAsync(
-          `CREATE TABLE IF NOT EXISTS users (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            username TEXT NOT NULL,
-            email TEXT NOT NULL,
-            password TEXT NOT NULL
-          )`
-        );
-        console.log("Users table created or already exists.");
-      } catch (error) {
-        console.error("Error creating table:", error);
-      }
-    };
 
-    createTable();
-  }, [database]);
 
-  const handleSubmit = async () => { 
+  // we should not create the database here -- this should be deleted -- 
+
+  //   useEffect(() => {
+  //     // Create the 'users' table if it doesn't already exist
+  //     const createTable = async () => {
+  //       try {
+  //         await database.execAsync(
+  //           `CREATE TABLE IF NOT EXISTS users (
+  //             id INTEGER PRIMARY KEY AUTOINCREMENT,
+  //             username TEXT NOT NULL,
+  //             email TEXT NOT NULL,
+  //             password TEXT NOT NULL
+  //           )`
+  //         );
+  //         console.log("Users table created or already exists.");
+  //       } catch (error) {
+  //         console.error("Error creating table:", error);
+  //       }
+  //     };
+
+  //     createTable();
+  //   }, [database]);
+
+  const handleSubmit = async () => {
     if (!isFormValid()) {
       alert('Please fill in all fields');
       return;
@@ -89,30 +97,42 @@ function SignupContent({ formData, setFormData, database, router }: SignupConten
       alert('Passwords do not match');
       return;
     }
-      
+
     try {
       // Insert user data into SQLite database
       const { email, password, username } = formData;
-      await database.runAsync(
-        `INSERT INTO users (username, email, password) VALUES (?, ?, ?)`,
-        [username, email, password]
-      );
-      
-      //TEST
+      insertUser(username, email, password);
+
+
+      // shouldnt call queries here
+      // -- remove this --
+      // await database.runAsync(
+      //   `INSERT INTO users (username, email, password) VALUES (?, ?, ?)`,
+      //   [username, email, password]
+      // );
+      // -- remove this --
+
+      // testing to see users in database
       console.log("User inserted successfully!");
-      const users = await database.getAllAsync("SELECT * FROM users");
-    console.log("Users in DB:", users);
-    
-        // Optionally, you can also store the username in AsyncStorage
+      getAllUsers();
+
+      // shouldnt call queries here
+      // -- remove this --
+      // const users = await getAllUsers();
+      // const users = await database.getAllAsync("SELECT * FROM users");
+      // console.log("Users in DB:", users);
+      // -- remove this --
+
+      // Optionally, you can also store the username in AsyncStorage
       await AsyncStorage.setItem('username', formData.username);
-  
-        // Navigate to home screen or dashboard after successful signup
+
+      // Navigate to home screen or dashboard after successful signup
       router.push('/');
-      } catch (error) {
-        console.error('Error inserting user:', error);
-        alert('Failed to create account');
-      }
-    };
+    } catch (error) {
+      console.error('Error inserting user:', error);
+      alert('Failed to create account');
+    }
+  };
 
   //     const response = await fetch('/api/auth/signup', {
   //       method: 'POST',
@@ -156,13 +176,13 @@ function SignupContent({ formData, setFormData, database, router }: SignupConten
       <TextInput
         placeholder="Username"
         value={formData.username}
-        onChangeText={(text) => setFormData({...formData, username: text})}
+        onChangeText={(text) => setFormData({ ...formData, username: text })}
         style={styles.input}
       />
       <TextInput
         placeholder="Email"
         value={formData.email}
-        onChangeText={(text) => setFormData({...formData, email: text})}
+        onChangeText={(text) => setFormData({ ...formData, email: text })}
         style={styles.input}
         keyboardType="email-address"
         autoCapitalize="none"
@@ -170,20 +190,20 @@ function SignupContent({ formData, setFormData, database, router }: SignupConten
       <TextInput
         placeholder="Password"
         value={formData.password}
-        onChangeText={(text) => setFormData({...formData, password: text})}
+        onChangeText={(text) => setFormData({ ...formData, password: text })}
         style={styles.input}
         secureTextEntry
       />
       <TextInput
         placeholder="Confirm Password"
         value={formData.confirmPassword}
-        onChangeText={(text) => setFormData({...formData, confirmPassword: text})}
+        onChangeText={(text) => setFormData({ ...formData, confirmPassword: text })}
         style={styles.input}
         secureTextEntry
       />
-      <Button 
+      <Button
         onPress={handleSubmit}
-        disabled={!isFormValid()} 
+        disabled={!isFormValid()}
       >
         Sign Up
       </Button>

@@ -10,6 +10,10 @@ import { useRouter, useNavigation } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { SQLiteDatabase, SQLiteProvider, useSQLiteContext } from "expo-sqlite";
 
+
+import database from "../db/database";
+import { insertUser, getAllUsers } from '../db/database';
+
 interface LoginFormData {
   email: string;
   password: string;
@@ -48,40 +52,48 @@ export default function Login() {
 
 // Create a wrapper component to use the SQLite context
 function LoginContentWrapper({ formData, setFormData, router }: Omit<LoginContentProps, 'database'>) {
-  const database = useSQLiteContext();
+  // const database = useSQLiteContext();
   return <LoginContent formData={formData} setFormData={setFormData} database={database} router={router} />;
 }
 
 function LoginContent({ formData, setFormData, database, router }: LoginContentProps) {
   const handleSubmit = async () => {
     //NEW CODE
-  try{
-    const result = await database.getAllAsync<{id: number; email: string; password: string}>(
-      "SELECT * FROM users WHERE email = ?", [formData.email]
-    );
-    if(result.length == 0){
-      alert("User not found");
-      return;
+    try {
+
+      // testing to see users in database
+      getAllUsers();
+
+      const result = await database.getAllAsync<{ id: number; email: string; password: string }>(
+        "SELECT * FROM users WHERE email = ?", [formData.email]
+      );
+      if (result.length == 0) {
+        alert("User not found");
+        return;
+      }
+      const user = result[0];
+      if (user.password == formData.password) {
+        await AsyncStorage.setItem('@user_email', formData.email);
+        await AsyncStorage.setItem('@user_id', user.id.toString());
+        console.log('Email stored successfully:', formData.email);
+        console.log('Email stored successfully:', user.id.toString());
+        router.push('/');
+      } else {
+        alert("Incorrect password");
+        setFormData({ email: '', password: '' });
+      }
+
+      // testing to see users in database
+      getAllUsers();
+
+    } catch (error) {
+      console.error('Login failed', error);
+      alert('Login failed: Email or password is not correct');
+      setFormData({ email: '', password: '' });
     }
-    const user = result[0];
-    if(user.password == formData.password){
-      await AsyncStorage.setItem('@user_email', formData.email);
-      await AsyncStorage.setItem('@user_id', user.id.toString());
-      console.log('Email stored successfully:', formData.email);
-      console.log('Email stored successfully:', user.id.toString());
-      router.push('/');
-    }else{
-    alert("Incorrect password");
-    setFormData({ email: '', password: '' });
-    }
-  } catch(error){
-    console.error('Login failed', error);
-    alert('Login failed: Email or password is not correct');
-    setFormData({ email: '', password: '' });
-  }
   };
 
-  const loadData = async () => { 
+  const loadData = async () => {
     const result = await database.getAllAsync<{
       id: number;
       email: string;
@@ -114,14 +126,14 @@ function LoginContent({ formData, setFormData, database, router }: LoginContentP
           <TextInput
             value={formData.password}
             onChangeText={(text) => setFormData({ ...formData, password: text })}
-            placeholder="Password" 
+            placeholder="Password"
             style={[styles.input]}
             secureTextEntry
           />
         </View>
 
         <View style={styles.buttonContainer}>
-          <TouchableOpacity 
+          <TouchableOpacity
             onPress={handleSubmit}
             disabled={!formData.email || !formData.password}
             style={[
@@ -137,7 +149,7 @@ function LoginContent({ formData, setFormData, database, router }: LoginContentP
       </View>
       <View style={styles.signupContainer}>
         <Text style={[styles.signupText]}>Don't have an account?</Text>
-        <Button 
+        <Button
           title="Sign Up"
           onPress={() => router.push('/auth/Signup')}
         />

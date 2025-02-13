@@ -13,24 +13,29 @@ SplashScreen.preventAutoHideAsync();
 
 // creating the sqlite database
 //const colorScheme = useColorScheme();
-const createDbIfNeeded = async (db: SQLiteDatabase) => {
-  console.log("Creating database");
-  try {
-    // for developement purposes to get a clean table
-    // comment out to save tables per expo app start
-    let response = await db.execAsync(
-      "DROP TABLE IF EXISTS users"
-    );
 
-    // Create a table
-    response = await db.execAsync(
-      "CREATE TABLE users (id INTEGER PRIMARY KEY AUTOINCREMENT, email TEXT, password TEXT)"
-    );
-    console.log("Database created", response);
-  } catch (error) {
-    console.error("Error creating database:", error);
-  }
-};
+
+// const createDbIfNeeded = async (db: SQLiteDatabase) => {
+//   console.log("Creating database");
+
+//   let response;
+
+//   try {
+//     // for developement purposes to get a clean table
+//     // comment out to save tables per expo app start
+//     response = await db.execAsync(
+//       "DROP TABLE IF EXISTS users"
+//     );
+
+//     // Create a table
+//     response = await db.execAsync(
+//       "CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT, email TEXT, password TEXT)"
+//     );
+//     console.log("Database created", response);
+//   } catch (error) {
+//     console.error("Error creating database:", error);
+//   }
+// };
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
@@ -50,8 +55,8 @@ export default function RootLayout() {
     return null;
   }
 
-  const db = openDatabaseSync('test.db');
-  createDbIfNeeded(db);
+  // const db = openDatabaseSync('test.db');
+  // createDbIfNeeded(db);
 
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
