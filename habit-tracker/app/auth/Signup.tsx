@@ -175,12 +175,14 @@ function SignupContent({ formData, setFormData, database, router }: SignupConten
       <Text style={styles.title}>Sign up to Start Tracking Today!</Text>
       <TextInput
         placeholder="Username"
+        placeholderTextColor={'#B76D68'}
         value={formData.username}
         onChangeText={(text) => setFormData({ ...formData, username: text })}
         style={styles.input}
       />
       <TextInput
         placeholder="Email"
+        placeholderTextColor={'#B76D68'}
         value={formData.email}
         onChangeText={(text) => setFormData({ ...formData, email: text })}
         style={styles.input}
@@ -189,6 +191,7 @@ function SignupContent({ formData, setFormData, database, router }: SignupConten
       />
       <TextInput
         placeholder="Password"
+        placeholderTextColor={'#B76D68'}
         value={formData.password}
         onChangeText={(text) => setFormData({ ...formData, password: text })}
         style={styles.input}
@@ -196,6 +199,7 @@ function SignupContent({ formData, setFormData, database, router }: SignupConten
       />
       <TextInput
         placeholder="Confirm Password"
+        placeholderTextColor={'#B76D68'}
         value={formData.confirmPassword}
         onChangeText={(text) => setFormData({ ...formData, confirmPassword: text })}
         style={styles.input}

@@ -50,7 +50,8 @@ const styles = StyleSheet.create({
   defaultText: {
     color: '#FFFFFF',
   },
+  // changed color from #374151 to white
   outlineText: {
-    color: '#374151',
+    color: 'white',
   },
 }); 
