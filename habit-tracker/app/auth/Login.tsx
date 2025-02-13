@@ -119,6 +119,7 @@ function LoginContent({ formData, setFormData, database, router }: LoginContentP
             value={formData.email}
             onChangeText={(text) => setFormData({ ...formData, email: text })}
             placeholder="Email"
+            placeholderTextColor={'#B76D68'}
             style={[styles.input]}
           />
         </View>
@@ -127,6 +128,7 @@ function LoginContent({ formData, setFormData, database, router }: LoginContentP
             value={formData.password}
             onChangeText={(text) => setFormData({ ...formData, password: text })}
             placeholder="Password"
+            placeholderTextColor={'#B76D68'}
             style={[styles.input]}
             secureTextEntry
           />

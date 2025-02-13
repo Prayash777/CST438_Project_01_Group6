@@ -92,6 +92,7 @@ export default function AddHabit() {
           value={habitData.name}
           onChangeText={(text) => setHabitData({...habitData, name: text})}
           placeholder="Enter habit name"
+          placeholderTextColor={'#B76D68'}
           style={styles.input}
         />
 
@@ -99,6 +100,7 @@ export default function AddHabit() {
           value={habitData.description}
           onChangeText={(text) => setHabitData({...habitData, description: text})}
           placeholder="Enter description"
+          placeholderTextColor={'#B76D68'}
           multiline
           style={styles.input}
         />
