@@ -68,6 +68,8 @@ const App = () => {
           setHabits([]); // Clear habits if no user is logged in
         } else {
           const userHabitsKey = `@habits_${userEmail}`; //habit for the email
+
+          // SQL GET
           const stored = await AsyncStorage.getItem(userHabitsKey);
           if (stored) setHabits(JSON.parse(stored));
         }
@@ -83,6 +85,8 @@ const App = () => {
   useEffect(() => {
     const checkUserLogin = async () => {
       try {
+
+        // SQL GET HERE
         const userEmail = await AsyncStorage.getItem('@user_email');
         if (!userEmail) {
           setHabits([]); // Clear habits if the user is not logged in
@@ -101,6 +105,7 @@ const App = () => {
       const updatedHabits = [...habits]
       updatedHabits[index].trackingData[date] = !updatedHabits[index].trackingData[date]
       setHabits(updatedHabits)
+      // DB INSERT HERE
       await AsyncStorage.setItem('@habits', JSON.stringify(updatedHabits))
     } catch (error) {
       console.error('Error updating habit:', error)
@@ -109,6 +114,8 @@ const App = () => {
   
   const handleAddHabit = async () => {
     try {
+
+      // DB QUERY HERE
       const userToken = await AsyncStorage.getItem('@user_email'); // Assuming you store a token
       console.log('Stored Email:', userToken);
       if (userToken) {
@@ -129,6 +136,8 @@ const App = () => {
       const userEmail = await AsyncStorage.getItem('@user_email');
       if (userEmail) {
         const userHabitsKey = `@habits_${userEmail}`;
+
+        // DB GO HERE
         await AsyncStorage.setItem(userHabitsKey, JSON.stringify(updatedHabits));
       }
     } catch (error) {
@@ -137,10 +146,9 @@ const App = () => {
   };
 
 
-  const countCheckedDays = trackingData => Object.values(trackingData).filter(Boolean).length
+  const countStreak = trackingData => Object.values(trackingData).filter(Boolean).length
 
   return (
-    // TODO: refactor all below
     <PaperProvider>
       <View style={styles.mainContainer}>
         <TouchableOpacity 
@@ -159,7 +167,7 @@ const App = () => {
           <ScrollView style={styles.habitList}>
             {habits.length === 0 ? (
               <View style={styles.emptyState}>
-                <Text style={[styles.emptyStateText, styles.emptyStateSubtext]}>
+                <Text style={[styles.emptyStateText]}>
                   No habits yet
                 </Text>
               </View>
@@ -169,9 +177,9 @@ const App = () => {
                   <View style={styles.habitHeader}>
                     <Text style={styles.habitName}>{habit.name}</Text>
                     <View style={styles.headerRight}>
-                      {countCheckedDays(habit.trackingData) > 0 && (
+                      {countStreak(habit.trackingData) > 0 && (
                         <Text style={styles.streak}>
-                          {countCheckedDays(habit.trackingData)} {countCheckedDays(habit.trackingData) === 1 ? 'Day' : 'Days'} 🔥
+                          {countStreak(habit.trackingData)} {countStreak(habit.trackingData) === 1 ? 'Day' : 'Days'} 🔥
                         </Text>
                       )}
                       <Menu

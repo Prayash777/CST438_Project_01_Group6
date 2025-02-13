@@ -19,9 +19,18 @@ const createDbIfNeeded = async (db: SQLiteDatabase) => {
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 username TEXT NOT NULL,
                 email TEXT NOT NULL,
-                password TEXT NOT NULL
-              )`
-        );
+                password TEXT NOT NULL,
+                graph TEXT
+            );
+
+            CREATE TABLE IF NOT EXISTS graphs (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                user_id INTEGER NOT NULL,
+                graph_id TEXT NOT NULL UNIQUE,
+                graph_data TEXT NOT NULL,
+                FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+            );
+            `);
         console.log("Database created", response);
     } catch (error) {
         console.error("Error creating database:", error);
@@ -52,6 +61,29 @@ export const getAllUsers = async () => {
         return [];
     }
 };
+
+// insert graphs
+export const insertGraph = async (graph: string) => {
+    try {
+        const graph = await database.runAsync(`
+            INSERT INTO graphs (user_id, graph_id, graph_data)
+            VALUES (1, 'habit-tracker', {"name: })
+            `)
+    } catch (error) {
+        console.error("Error inserting graph: ", error);
+    }
+}
+
+// get graphs
+export const getGraphs = async () => {
+    try {
+        const graphs = await database.getAllSync('SELECT * FROM graphs');
+        console.log("Graph fetched:::", graphs);
+        return graphs;
+    } catch (error) {
+        console.error("Error inserting graph: ", error);
+    }
+}
 
 const database = openDatabaseSync('habit-tracker.db');
 createDbIfNeeded(database);
