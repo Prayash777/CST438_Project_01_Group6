@@ -167,7 +167,7 @@ const App = () => {
           <ScrollView style={styles.habitList}>
             {habits.length === 0 ? (
               <View style={styles.emptyState}>
-                <Text style={[styles.emptyStateText, styles.emptyStateSubtext]}>
+                <Text style={[styles.emptyStateText]}>
                   No habits yet
                 </Text>
               </View>
