@@ -63,7 +63,6 @@ const App = () => {
     const loadHabits = async () => {
       try {
         const userEmail = await AsyncStorage.getItem('@user_email');
-        //const stored = await AsyncStorage.getItem('@habits')
         if (!userEmail) {
           setHabits([]); // Clear habits if no user is logged in
         } else {
