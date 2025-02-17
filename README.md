@@ -1,4 +1,6 @@
-# CST438_Project_01_Group6
+## **[Project 01 Retrospective and overview pdf](retrospective.pdf)**
+
+# **CST438_Project_01_Group6**
 Project 1 - Android based API app 
 
 ### Members:
@@ -24,5 +26,3 @@ Project 1 - Android based API app
 4. Scan the QR code with the Expo Go app on your phone or press `a` to run on an android emulator
 
 ---
-
-
