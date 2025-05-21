@@ -2,7 +2,8 @@
 
 # **CST438_Project_01_Group6**
 Project 1 - Android based API app 
-
+The app helps user track their habits. User can create multiple habits. Each habit is shown with a github contribution style map which includes 31 days and shows
+Monday through Sunday. The user can choose color to represent their habits. There are features to edit and delete the habits too.
 ### Members:
 - Ethan Bleier
 - Prayash Raj Singh
